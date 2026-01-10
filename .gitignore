@@ -1,0 +1,33 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Temp files
+temp/
+*.tmp
+*.temp
+
+# CodeBuddy 本地配置（各项目独立，不提交到大仓）
+# 模板文件在 templates/codebuddy/ 目录
+.codebuddy/
+
+# Local config (if any)
+local.config.md
+
+# 子项目任务目录（敏感/大量，由子项目独立 Git 管理）
+projects/*/tasks/
+projects/*/docs/
+
+# 保留目录结构
+!projects/*/tasks/.gitkeep
+!projects/*/docs/.gitkeep
+
+# 归档目录（历史敏感数据）
+archive/

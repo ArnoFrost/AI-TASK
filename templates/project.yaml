@@ -1,0 +1,40 @@
+# AI-TASK 项目元数据模板
+# 文件位置: projects/{PROJECT}/project.yaml
+
+# ========== 必需字段 ==========
+
+# 项目代号 (与目录名一致)
+code: "{PROJECT_CODE}"
+
+# 项目名称
+name: "{PROJECT_NAME}"
+
+# 跨设备路径列表 (按优先级排序，AI 自动检测存在的路径)
+paths:
+  - ~/path/to/project           # 主力设备
+  # - ~/Projects/{PROJECT}      # 备用路径
+  # - /home/user/projects/{PROJECT}  # Linux 路径
+
+# ========== 可选字段 ==========
+
+# 技术栈
+tech_stack:
+  - Tech1
+  - Tech2
+
+# 创建时间
+created: "YYYY-MM-DD"
+
+# 项目状态: active | paused | archived
+status: active
+
+# 标签
+tags: []
+
+# 关联项目
+related: []
+
+# 扩展元数据
+metadata:
+  # author: ""
+  # version: ""
