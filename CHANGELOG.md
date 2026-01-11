@@ -7,6 +7,17 @@
 
 ---
 
+## [1.1.1] - 2026-01-11
+
+### Added
+- **DDAC 关联说明**：README 新增与 [DDAC](https://github.com/ArnoFrost/DDAC) 方法论的关系说明
+  - AI-TASK 是 DDAC 理论框架的落地实现 / MVP
+
+### Fixed
+- 统一代码块语法：`SPEC.md`、`CODEBUDDY.md` 中无标记代码块改为 `text` 类型
+
+---
+
 ## [1.1.0] - 2026-01-11
 
 ### Added
@@ -59,5 +70,6 @@
 
 ---
 
+[1.1.1]: https://github.com/ArnoFrost/AI-TASK/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/ArnoFrost/AI-TASK/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/ArnoFrost/AI-TASK/releases/tag/v1.0.0
