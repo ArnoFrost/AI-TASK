@@ -24,7 +24,7 @@
 
 ## 📂 项目结构
 
-```
+```text
 AI-TASK/
 ├── README.md             # 中文说明
 ├── README_EN.md          # English README

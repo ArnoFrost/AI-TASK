@@ -7,7 +7,7 @@
 English | [简体中文](./README.md)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.1.0-green.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.1.1-green.svg)](CHANGELOG.md)
 
 </div>
 
@@ -16,6 +16,8 @@ English | [简体中文](./README.md)
 ## 🎯 What is AI-TASK?
 
 AI-TASK is a **file-system convention for AI collaboration**. It standardizes where your AI workflow artifacts live (tasks, designs, investigation notes, validations, conclusions) via a consistent directory structure, templates, Rules, and Skills—so you can reuse the same collaboration playbook across multiple projects.
+
+> 💡 **Relationship with DDAC**: AI-TASK is a **practical implementation** of the [DDAC (Document-Driven AI Collaboration)](https://github.com/ArnoFrost/DDAC) methodology. DDAC defines the theoretical framework and four-layer architecture for document-driven AI collaboration, while AI-TASK is an MVP that applies these principles to "solo developer, multi-project task management". For the design philosophy, see DDAC; to get started hands-on, start here.
 
 It is designed primarily for **solo developers** who work on many repositories and switch between devices (e.g., iCloud/drive sync), and want their AI assistant to follow the same workflow everywhere.
 
