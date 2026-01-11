@@ -54,3 +54,20 @@ related: []
 metadata:
   # author: ""
   # version: ""
+
+# ========== 同步配置 ==========
+
+# 模板同步配置 (控制 ./sync-templates.sh 的行为)
+sync:
+  # 是否接受主仓模板同步
+  enabled: true           # false = 跳过此项目
+  
+  # 同步策略
+  strategy: "merge"       # merge | skip | force
+  # - merge: 只补充缺失字段（默认，推荐）
+  # - skip: 完全跳过此项目
+  # - force: 强制用模板覆盖（危险）
+  
+  # 锁定字段 (这些字段不会被同步覆盖)
+  locked_fields: []
+  # 示例: [task_naming, tech_stack]
