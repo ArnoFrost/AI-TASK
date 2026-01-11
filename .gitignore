@@ -21,7 +21,21 @@ temp/
 # Local config (if any)
 local.config.md
 
-# 子项目任务目录（敏感/大量，由子项目独立 Git 管理）
+# ========== 项目数据隐私保护 ==========
+# 只公开 EXAMPLE 作为示例项目，其他真实项目数据不提交
+
+# 忽略所有真实项目（保留 EXAMPLE 作为公开示例）
+projects/AI-TASK/
+projects/L2D/
+projects/TVKMM/
+projects/Textoon/
+projects/dotfiles/
+
+# 如果未来新增项目，默认也忽略（除非显式排除）
+# 可以用 projects/*/ 全部忽略，然后 !projects/EXAMPLE/ 排除
+# 但为了明确，这里显式列出
+
+# 子项目任务目录（即使 EXAMPLE 也不提交任务内容）
 projects/*/tasks/
 projects/*/docs/
 
@@ -30,4 +44,13 @@ projects/*/docs/
 !projects/*/docs/.gitkeep
 
 # 归档目录（历史敏感数据）
+projects/*/archive/
+
+# 归档目录（历史敏感数据）
 archive/
+
+# Rules 中的真实项目规则（可能包含敏感架构信息）
+rules/L2D.md
+rules/TVKMM.md
+rules/Textoon.md
+rules/dotfiles.md
