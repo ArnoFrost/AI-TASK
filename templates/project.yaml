@@ -17,6 +17,22 @@ paths:
 
 # ========== 可选字段 ==========
 
+# 任务命名配置
+task_naming:
+  # 文件名格式 (可选值见下方说明)
+  # - "full"    : {YYYYMMDD}-{NNN}_[标签]任务名称.md  (推荐，完整格式)
+  # - "date"    : {YYYYMMDD}-{NNN}_任务名称.md        (日期+序号，无标签)
+  # - "simple"  : {NNN}-任务名称.md                   (仅序号，最简)
+  # - "custom"  : 使用下方 pattern 自定义
+  format: "full"
+  
+  # 自定义格式 (仅当 format: "custom" 时生效)
+  # 可用变量: {DATE}, {NNN}, {TAG}, {NAME}
+  # pattern: "{DATE}-{NNN}_{TAG}{NAME}.md"
+  
+  # 序号位数 (默认 3，即 001-999)
+  # seq_digits: 3
+
 # 技术栈
 tech_stack:
   - Tech1

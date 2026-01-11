@@ -78,6 +78,12 @@ created: 2026-01-10
 status: active                        # active | paused | archived
 tags: [web, frontend]
 related: []                           # 关联项目
+
+# 任务命名配置 (可选)
+task_naming:
+  format: "full"                      # full | date | simple | custom
+  # pattern: "{DATE}-{NNN}_{TAG}{NAME}.md"
+  # seq_digits: 3
 ```
 
 ### 项目入口 (index.md)
@@ -153,12 +159,22 @@ mv tasks/20251211-001_*.md archive/2025-12/
 
 ### 任务文件
 
-```
-{DATE}-{SEQ}_[TAG]NAME.md
+任务文件命名支持多种格式，通过 `project.yaml` 中的 `task_naming.format` 配置：
 
-示例:
-20260110-001_[功能]用户登录模块.md
-20260110-002_[修复]首页加载异常.md
+| format | 文件名格式 | 示例 |
+|--------|-----------|------|
+| `full` (默认) | `{DATE}-{SEQ}_[TAG]NAME.md` | `20260110-001_[功能]用户登录.md` |
+| `date` | `{DATE}-{SEQ}_NAME.md` | `20260110-001_用户登录.md` |
+| `simple` | `{SEQ}-NAME.md` | `001-用户登录.md` |
+| `custom` | 自定义 pattern | 按 `task_naming.pattern` 生成 |
+
+**配置示例**（在 `project.yaml` 中）：
+
+```yaml
+task_naming:
+  format: "full"           # full | date | simple | custom
+  # pattern: "{DATE}-{NNN}_{TAG}{NAME}.md"  # 仅 custom 时使用
+  # seq_digits: 3          # 序号位数，默认 3
 ```
 
 ### 标签类型

@@ -17,6 +17,11 @@ temp/
 # CodeBuddy 本地配置（各项目独立，不提交到大仓）
 # 模板文件在 templates/codebuddy/ 目录
 .codebuddy/
+# 但保留公共命令定义（斜杠命令是核心功能）
+!.codebuddy/commands/
+!.codebuddy/commands/*.md
+!.codebuddy/rules/
+!.codebuddy/rules/*.md
 
 # Local config (if any)
 local.config.md
