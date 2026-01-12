@@ -68,6 +68,32 @@ AI-TASK 是一套**面向 AI 协作的文件系统约定**：用统一的目录�
 
 > 💡 **与 DDAC 的关系**：AI-TASK 是 [DDAC (Document-Driven AI Collaboration)](https://github.com/ArnoFrost/DDAC) 方法论的**落地实现**。DDAC 定义了"文档驱动 AI 协作"的理论框架与四层架构，而 AI-TASK 则是这套理念在"单人多项目任务管理"场景下的 MVP 实践。如果你想了解背后的设计哲学，请参阅 DDAC；如果你想直接上手使用，从这里开始。
 
+```mermaid
+graph LR
+    subgraph "DDAC 方法论"
+        D1[📚 理论框架]
+        D2[🏗️ 四层架构]
+        D3[📝 17个元Prompt]
+    end
+    
+    subgraph "AI-TASK 落地"
+        A1[📂 项目结构]
+        A2[⚡ 斜杠命令]
+        A3[📋 任务模板]
+    end
+    
+    D1 -->|指导| A1
+    D2 -->|实现| A2
+    D3 -->|应用| A3
+    
+    style D1 fill:#e1f5fe
+    style D2 fill:#e1f5fe
+    style D3 fill:#e1f5fe
+    style A1 fill:#fff3e0
+    style A2 fill:#fff3e0
+    style A3 fill:#fff3e0
+```
+
 它特别适合：**你一个人同时维护多个项目**，并且会在多台设备之间切换（例如 iCloud/云盘同步），希望 AI 在任何项目里都能"按同一套路"创建任务、更新进度、查看状态。
 
 ### 核心特性

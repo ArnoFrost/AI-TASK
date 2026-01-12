@@ -64,6 +64,32 @@ AI-TASK is a **file-system convention for AI collaboration**. It standardizes wh
 
 > 💡 **Relationship with DDAC**: AI-TASK is a **practical implementation** of the [DDAC (Document-Driven AI Collaboration)](https://github.com/ArnoFrost/DDAC) methodology. DDAC defines the theoretical framework and four-layer architecture for document-driven AI collaboration, while AI-TASK is an MVP that applies these principles to "solo developer, multi-project task management". For the design philosophy, see DDAC; to get started hands-on, start here.
 
+```mermaid
+graph LR
+    subgraph "DDAC Methodology"
+        D1[📚 Theory]
+        D2[🏗️ 4-Layer Arch]
+        D3[📝 17 Meta-Prompts]
+    end
+    
+    subgraph "AI-TASK Implementation"
+        A1[📂 Project Structure]
+        A2[⚡ Slash Commands]
+        A3[📋 Task Templates]
+    end
+    
+    D1 -->|guides| A1
+    D2 -->|implements| A2
+    D3 -->|applies| A3
+    
+    style D1 fill:#e1f5fe
+    style D2 fill:#e1f5fe
+    style D3 fill:#e1f5fe
+    style A1 fill:#fff3e0
+    style A2 fill:#fff3e0
+    style A3 fill:#fff3e0
+```
+
 It is designed primarily for **solo developers** who work on many repositories and switch between devices (e.g., iCloud/drive sync), and want their AI assistant to follow the same workflow everywhere.
 
 ### Key features
