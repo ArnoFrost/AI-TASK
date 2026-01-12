@@ -7,15 +7,6 @@ name: 示例项目
 paths:
   - ~/Projects/example-project
 
-# 任务命名配置
-task_naming:
-  # 格式选项: full | date | simple | custom
-  format: "full"
-  # 自定义格式 (仅 format: "custom" 时生效)
-  # pattern: "{DATE}-{NNN}_{TAG}{NAME}.md"
-  # 序号位数 (默认 3)
-  # seq_digits: 3
-
 tech_stack:
   - TypeScript
   - React
