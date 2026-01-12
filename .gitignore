@@ -29,33 +29,30 @@ local.config.md
 # ========== 项目数据隐私保护 ==========
 # 只公开 EXAMPLE 作为示例项目，其他真实项目数据不提交
 
-# 忽略所有真实项目（保留 EXAMPLE 作为公开示例）
-projects/AI-TASK/
-projects/L2D/
-projects/TVKMM/
-projects/Textoon/
-projects/dotfiles/
-
-# 如果未来新增项目，默认也忽略（除非显式排除）
-# 可以用 projects/*/ 全部忽略，然后 !projects/EXAMPLE/ 排除
-# 但为了明确，这里显式列出
+# 忽略 projects 下的所有项目目录
+projects/*/
+# 但保留 EXAMPLE 目录（示例项目）
+!projects/EXAMPLE/
+# 保留 AI-TASK 目录（本项目自身）
+!projects/AI-TASK/
 
 # 子项目任务目录（即使 EXAMPLE 也不提交任务内容）
 projects/*/tasks/
 projects/*/docs/
+projects/*/archive/
+# 但保留 AI-TASK 自身的任务（本项目任务需要公开）
+!projects/AI-TASK/tasks/
+!projects/AI-TASK/docs/
+# 保留 EXAMPLE 的任务（作为示例展示）
+!projects/EXAMPLE/tasks/
 
 # 保留目录结构
 !projects/*/tasks/.gitkeep
 !projects/*/docs/.gitkeep
 
-# 归档目录（历史敏感数据）
-projects/*/archive/
-
-# 归档目录（历史敏感数据）
+# 全局归档目录（历史敏感数据）
 archive/
 
 # Rules 中的真实项目规则（可能包含敏感架构信息）
-rules/L2D.md
-rules/TVKMM.md
-rules/Textoon.md
-rules/dotfiles.md
+rules/
+!rules/README.md

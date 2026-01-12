@@ -1,11 +1,10 @@
-# 示例项目元数据
+# AI-TASK 项目元数据
 
-code: EXAMPLE
-name: 示例项目
+code: AI-TASK
+name: AI-TASK 协作系统
 
-# 跨设备路径 (按优先级排序，AI 自动检测存在的路径)
 paths:
-  - ~/Projects/example-project
+  - ~/AI-TASK
 
 # 任务命名配置
 task_naming:
@@ -18,20 +17,23 @@ task_naming:
 
 
 tech_stack:
-  - TypeScript
-  - React
+  - Markdown
+  - Shell
+  - YAML
 
-created: "2026-01-10"
+created: "2025-01-04"
 status: active
 
 tags:
-  - demo
-  - template
+  - meta
+  - tooling
+  - cross-platform
 
 related: []
 
 metadata:
-  description: AI-TASK 示例项目，展示基本用法
+  version: "4.0.0"
+  description: 跨平台、跨设备 AI 协作路书系统
 
 # 模板同步配置
 sync:
