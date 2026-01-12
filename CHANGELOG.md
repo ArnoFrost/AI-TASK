@@ -7,6 +7,31 @@
 
 ---
 
+## [1.2.0] - 2026-01-12
+
+### Added
+- **README 极客化优化**
+  - 新增 GitHub stars/forks/last-commit 动态徽章
+  - 新增 DDAC Powered 徽章（flat-square 风格统一）
+  - 添加快速导航条和可折叠目录结构
+  - 特性列表改为表格化展示
+  - Footer 添加作者社交链接
+- **开源规范完善**
+  - 新增 `templates/README.md` 模板库说明
+  - 新增 `CONTRIBUTING.md` 贡献指南
+  - 新增 `.github/ISSUE_TEMPLATE/` Issue 模板
+  - 新增 `.github/PULL_REQUEST_TEMPLATE.md` PR 模板
+
+### Changed
+- **CODEBUDDY.md** 精简为 IDE 速查卡（Token < 500）
+- **.gitignore** 通用化配置：`projects/*/` 通配忽略，仅保留 `!projects/EXAMPLE/`
+- **EXAMPLE 模板** 同步 `task_naming` + `sync` 配置块
+
+### Fixed
+- 版本号统一：所有文档版本号对齐为 v1.2.0
+
+---
+
 ## [1.1.1] - 2026-01-11
 
 ### Added
@@ -70,6 +95,7 @@
 
 ---
 
+[1.2.0]: https://github.com/ArnoFrost/AI-TASK/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/ArnoFrost/AI-TASK/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/ArnoFrost/AI-TASK/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/ArnoFrost/AI-TASK/releases/tag/v1.0.0
