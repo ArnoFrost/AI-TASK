@@ -10,7 +10,7 @@ English | [简体中文](./README.md)
 [![GitHub forks](https://img.shields.io/github/forks/ArnoFrost/AI-TASK?style=flat-square&logo=github)](https://github.com/ArnoFrost/AI-TASK/network)
 [![GitHub last commit](https://img.shields.io/github/last-commit/ArnoFrost/AI-TASK?style=flat-square)](https://github.com/ArnoFrost/AI-TASK/commits)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.1.1-green.svg?style=flat-square)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.2.0-green.svg?style=flat-square)](CHANGELOG.md)
 [![DDAC](https://img.shields.io/badge/Powered%20by-DDAC-blueviolet?style=flat-square&logo=bookstack)](https://github.com/ArnoFrost/DDAC)
 
 <p>
@@ -57,10 +57,10 @@ It is designed primarily for **solo developers** who work on many repositories a
 | 🤖 | **AI native** - Built-in slash commands for CodeBuddy/Claude Code |
 | 📐 | **Template-driven** - Consistent, predictable AI output |
 
-### Fits / Doesn’t fit
+### Fits / Doesn't fit
 
 - **Fits**: solo (or tiny teams), multi-project, cross-device, willing to write structured Markdown.
-- **Doesn’t fit**: teams needing boards/notifications/permissions/assignments and platform-grade workflows.
+- **Doesn't fit**: teams needing boards/notifications/permissions/assignments and platform-grade workflows.
 
 ---
 
@@ -68,7 +68,25 @@ It is designed primarily for **solo developers** who work on many repositories a
 
 - **`projects/{CODE}/`**: the per-project collaboration space (tasks/docs/archive/metadata).
 - **`ai-task/` symlink**: a mount point inside your real repo so the AI can always find the same paths.
-- **`project.yaml` multi-device paths**: list the same project’s paths across devices.
+- **`project.yaml` multi-device paths**: list the same project's paths across devices.
+
+### 🔄 DDAC Self-Governance
+
+AI-TASK follows the self-governance principles of [DDAC methodology](https://github.com/ArnoFrost/DDAC):
+
+| Principle | Description |
+|-----------|-------------|
+| **Project Self-Space** | `projects/{PROJECT}/` manages its own tasks |
+| **Tasks Must Be Documented** | Discussion plans → `tasks/` task documents |
+| **Status Must Be Updated** | Task completion → update `index.md` task list |
+
+**Task Documentation Triggers** (create task if any applies):
+- User proposes multi-step optimization/improvement plan
+- User includes `@projects/{PROJECT}/index.md` context
+- Discussion involves 3+ file modifications
+- User mentions "plan", "design", "proposal", "improve"
+
+See [SPEC.md#ddac-self-governance](./SPEC.md#-ddac-自治理规范) for details.
 
 ---
 

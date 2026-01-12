@@ -10,7 +10,7 @@
 [![GitHub forks](https://img.shields.io/github/forks/ArnoFrost/AI-TASK?style=flat-square&logo=github)](https://github.com/ArnoFrost/AI-TASK/network)
 [![GitHub last commit](https://img.shields.io/github/last-commit/ArnoFrost/AI-TASK?style=flat-square)](https://github.com/ArnoFrost/AI-TASK/commits)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.1.1-green.svg?style=flat-square)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.2.0-green.svg?style=flat-square)](CHANGELOG.md)
 [![DDAC](https://img.shields.io/badge/Powered%20by-DDAC-blueviolet?style=flat-square&logo=bookstack)](https://github.com/ArnoFrost/DDAC)
 
 <p>
@@ -73,6 +73,24 @@ AI-TASK 是一套**面向 AI 协作的文件系统约定**：用统一的目录�
 - **`projects/{CODE}/`**：每个项目的"协作空间"（任务、文档、归档、元数据）。你可以把它理解为：从主仓模板派生出来的项目空间，彼此隔离但共享同一套规范。
 - **`ai-task/` 软链接**：挂载点。把 `projects/{CODE}/` 软链接到你的真实项目根目录下，AI 在任何项目里都能通过固定路径访问任务与规范。
 - **`project.yaml` 跨设备路径**：记录同一项目在不同设备上的真实路径（按优先级排序），用于跨设备迁移与定位。
+
+### 🔄 DDAC 自治理
+
+AI-TASK 遵循 [DDAC 方法论](https://github.com/ArnoFrost/DDAC) 的自治理原则：
+
+| 原则 | 说明 |
+|------|------|
+| **项目自治空间** | `projects/{PROJECT}/` 管理自身任务 |
+| **任务必须沉淀** | 讨论产生的计划 → `tasks/` 任务文档 |
+| **状态必须更新** | 任务完成 → 更新 `index.md` 任务列表 |
+
+**任务沉淀触发条件**（满足任一即创建任务）：
+- 用户提出多步骤优化/改进计划
+- 用户引入 `@projects/{PROJECT}/index.md` 上下文
+- 讨论涉及 3+ 个文件修改
+- 用户说"梳理"、"规划"、"方案"等关键词
+
+详见 [SPEC.md#ddac-自治理规范](./SPEC.md#-ddac-自治理规范)
 
 ---
 
