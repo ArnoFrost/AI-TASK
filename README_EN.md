@@ -27,6 +27,7 @@ English | [简体中文](./README.md)
 <details>
 <summary>📖 Table of Contents</summary>
 
+- [30-Second Demo](#-30-second-demo)
 - [What is AI-TASK](#-what-is-ai-task)
 - [Key Concepts](#-key-concepts-3-things)
 - [Quick Start](#-quick-start)
@@ -36,6 +37,24 @@ English | [简体中文](./README.md)
 - [Contributing](#-contributing)
 
 </details>
+
+---
+
+## ⚡ 30-Second Demo
+
+**Don't want to read docs? Copy this to your AI assistant:**
+
+```
+Please create a task document using AI-TASK format:
+- Project: DEMO
+- Tag: [feature]
+- Task: User Login Module
+- Goals: 1. Login form UI  2. Form validation  3. API integration
+
+Reference: https://github.com/ArnoFrost/AI-TASK/blob/main/projects/EXAMPLE/tasks/20260101-001_%5B功能%5D用户登录模块.md
+```
+
+AI will generate a standardized task document ✅ → This is the core value of AI-TASK: **Make AI output reusable collaboration documents in a unified format**
 
 ---
 
