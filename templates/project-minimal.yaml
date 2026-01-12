@@ -1,0 +1,12 @@
+# AI-TASK 项目元数据 - 最小配置
+# 仅需 3 个字段即可开始使用
+
+# 项目代号 (与目录名一致)
+code: MYAPP
+
+# 项目名称
+name: My Application
+
+# 项目路径 (支持多设备)
+paths:
+  - ~/Projects/myapp
