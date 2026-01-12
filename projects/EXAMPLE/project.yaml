@@ -7,6 +7,16 @@ name: 示例项目
 paths:
   - ~/Projects/example-project
 
+# 任务命名配置
+task_naming:
+  # 格式选项: full | date | simple | custom
+  format: "full"
+  # 自定义格式 (仅 format: "custom" 时生效)
+  # pattern: "{DATE}-{NNN}_{TAG}{NAME}.md"
+  # 序号位数 (默认 3)
+  # seq_digits: 3
+
+
 tech_stack:
   - TypeScript
   - React
@@ -22,3 +32,10 @@ related: []
 
 metadata:
   description: AI-TASK 示例项目，展示基本用法
+
+# 模板同步配置
+sync:
+  enabled: true           # false = 跳过此项目的模板同步
+  strategy: "merge"       # merge | skip | force
+  locked_fields: []       # 不被同步覆盖的字段，如: [task_naming, tech_stack]
+
