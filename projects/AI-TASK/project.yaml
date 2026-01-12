@@ -1,0 +1,43 @@
+# AI-TASK 项目元数据
+
+code: AI-TASK
+name: AI-TASK 协作系统
+
+paths:
+  - ~/AI-TASK
+
+# 任务命名配置
+task_naming:
+  # 格式选项: full | date | simple | custom
+  format: "full"
+  # 自定义格式 (仅 format: "custom" 时生效)
+  # pattern: "{DATE}-{NNN}_{TAG}{NAME}.md"
+  # 序号位数 (默认 3)
+  # seq_digits: 3
+
+
+tech_stack:
+  - Markdown
+  - Shell
+  - YAML
+
+created: "2025-01-04"
+status: active
+
+tags:
+  - meta
+  - tooling
+  - cross-platform
+
+related: []
+
+metadata:
+  version: "4.0.0"
+  description: 跨平台、跨设备 AI 协作路书系统
+
+# 模板同步配置
+sync:
+  enabled: true           # false = 跳过此项目的模板同步
+  strategy: "merge"       # merge | skip | force
+  locked_fields: []       # 不被同步覆盖的字段，如: [task_naming, tech_stack]
+
