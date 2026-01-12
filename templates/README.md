@@ -6,7 +6,8 @@
 
 | 模板文件 | 用途 | 使用场景 |
 |----------|------|----------|
-| `project.yaml` | 项目元数据 | 初始化新项目时创建 |
+| `project.yaml` | 项目元数据（完整版） | 需要高级配置时使用 |
+| `project-minimal.yaml` | 项目元数据（精简版） | ⭐ 快速开始推荐 |
 | `project-index.md` | 项目入口文档 | 项目 `index.md` 模板 |
 | `task-template.md` | 任务文档 | 创建新任务时使用 |
 | `daily-summary.md` | 日报模板 | 生成每日工作总结 |
