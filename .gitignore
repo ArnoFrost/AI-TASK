@@ -43,6 +43,8 @@ projects/*/archive/
 # 但保留 AI-TASK 自身的任务（本项目任务需要公开）
 !projects/AI-TASK/tasks/
 !projects/AI-TASK/docs/
+# 保留 EXAMPLE 的任务（作为示例展示）
+!projects/EXAMPLE/tasks/
 
 # 保留目录结构
 !projects/*/tasks/.gitkeep
