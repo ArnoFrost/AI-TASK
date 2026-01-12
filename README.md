@@ -2,14 +2,44 @@
 
 # AI-TASK
 
-**单人 · 多项目 · 跨设备的 AI 协作路书与任务管理系统（文件/模板驱动）**
+**单人 · 多项目 · 跨设备的 AI 协作路书与任务管理系统**
 
 [English](./README_EN.md) | 简体中文
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.1.1-green.svg)](CHANGELOG.md)
+[![GitHub stars](https://img.shields.io/github/stars/ArnoFrost/AI-TASK?style=flat-square&logo=github)](https://github.com/ArnoFrost/AI-TASK/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/ArnoFrost/AI-TASK?style=flat-square&logo=github)](https://github.com/ArnoFrost/AI-TASK/network)
+[![GitHub last commit](https://img.shields.io/github/last-commit/ArnoFrost/AI-TASK?style=flat-square)](https://github.com/ArnoFrost/AI-TASK/commits)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
+[![Version](https://img.shields.io/badge/version-1.1.1-green.svg?style=flat-square)](CHANGELOG.md)
+[![DDAC](https://img.shields.io/badge/Powered%20by-DDAC-blueviolet?style=flat-square&logo=bookstack)](https://github.com/ArnoFrost/DDAC)
+
+<p>
+  <a href="#-快速开始3-分钟">快速开始</a> •
+  <a href="#-架构设计">架构</a> •
+  <a href="#-可用命令">命令</a> •
+  <a href="./SPEC.md">规范</a> •
+  <a href="./CHANGELOG.md">更新日志</a>
+</p>
 
 </div>
+
+---
+
+<details>
+<summary>📖 目录 / Table of Contents</summary>
+
+- [什么是 AI-TASK](#-什么是-ai-task)
+- [核心概念](#-核心概念先理解这-3-个就够用了)
+- [快速开始](#-快速开始3-分钟)
+- [架构设计](#-架构设计)
+- [目录结构](#-目录结构)
+- [可用命令](#-可用命令)
+- [软链接工作原理](#-软链接工作原理)
+- [文档](#-文档)
+- [已知局限](#️-已知局限保持小而美)
+- [贡献](#-贡献)
+
+</details>
 
 ---
 
@@ -23,11 +53,13 @@ AI-TASK 是一套**面向 AI 协作的文件系统约定**：用统一的目录�
 
 ### 核心特性
 
-- **跨项目的协作空间**：每个项目在 `projects/{CODE}/` 下拥有独立的任务/文档/归档与元数据。
-- **跨设备一致性**：`project.yaml` 支持多设备路径映射，你只要同步 `AI-TASK/` 目录即可。
-- **无侵入接入现有项目**：通过 `ai-task/` 软链接把协作空间挂到你的项目根目录，AI 总能在固定位置找到上下文。
-- **模板化让 AI 更稳定**：统一任务模板与命名规范，让 AI 输出更可控、可检索、可复用。
-- **IDE/助手适配**：内置 CodeBuddy/Claude Code 的斜杠命令模板（`/task`、`/status`、`/archive` 等）。
+| 特性 | 描述 |
+|:---:|---|
+| 🗂️ | **跨项目协作空间** - 每个项目在 `projects/{CODE}/` 下独立管理 |
+| 🔗 | **软链接集成** - 通过 `ai-task/` 无侵入式接入现有项目 |
+| 📱 | **跨设备同步** - `project.yaml` 支持多设备路径映射 |
+| 🤖 | **AI 原生** - 内置 CodeBuddy/Claude Code 斜杠命令 |
+| 📐 | **模板驱动** - 统一任务模板，输出可控可复用 |
 
 ### 适用 / 不适用
 
@@ -234,6 +266,8 @@ flowchart LR
 
 <div align="center">
 
-Made with ❤️ for AI-assisted development
+Made with ❤️ by [ArnoFrost](https://github.com/ArnoFrost)
+
+[![GitHub](https://img.shields.io/badge/GitHub-ArnoFrost-181717?style=flat-square&logo=github)](https://github.com/ArnoFrost)
 
 </div>

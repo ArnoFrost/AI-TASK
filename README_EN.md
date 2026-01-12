@@ -2,14 +2,40 @@
 
 # AI-TASK
 
-**A file/template-driven AI collaboration roadmap + task system for a solo developer across many projects and devices**
+**A file/template-driven AI collaboration roadmap + task system for solo developers across many projects and devices**
 
 English | [简体中文](./README.md)
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.1.1-green.svg)](CHANGELOG.md)
+[![GitHub stars](https://img.shields.io/github/stars/ArnoFrost/AI-TASK?style=flat-square&logo=github)](https://github.com/ArnoFrost/AI-TASK/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/ArnoFrost/AI-TASK?style=flat-square&logo=github)](https://github.com/ArnoFrost/AI-TASK/network)
+[![GitHub last commit](https://img.shields.io/github/last-commit/ArnoFrost/AI-TASK?style=flat-square)](https://github.com/ArnoFrost/AI-TASK/commits)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
+[![Version](https://img.shields.io/badge/version-1.1.1-green.svg?style=flat-square)](CHANGELOG.md)
+[![DDAC](https://img.shields.io/badge/Powered%20by-DDAC-blueviolet?style=flat-square&logo=bookstack)](https://github.com/ArnoFrost/DDAC)
+
+<p>
+  <a href="#-quick-start">Quick Start</a> •
+  <a href="#-architecture">Architecture</a> •
+  <a href="./SPEC.md">Spec</a> •
+  <a href="./CHANGELOG.md">Changelog</a>
+</p>
 
 </div>
+
+---
+
+<details>
+<summary>📖 Table of Contents</summary>
+
+- [What is AI-TASK](#-what-is-ai-task)
+- [Key Concepts](#-key-concepts-3-things)
+- [Quick Start](#-quick-start)
+- [Architecture](#-architecture)
+- [Directory Structure](#-directory-structure)
+- [Known Limitations](#️-known-limitations-stay-small--sharp)
+- [Contributing](#-contributing)
+
+</details>
 
 ---
 
@@ -23,11 +49,13 @@ It is designed primarily for **solo developers** who work on many repositories a
 
 ### Key features
 
-- **Per-project collaboration space**: each project lives under `projects/{CODE}/` with tasks/docs/archive/metadata.
-- **Cross-device consistency**: `project.yaml` can list multiple device paths.
-- **Non-invasive integration**: mount the collaboration space into any existing repo via an `ai-task/` symlink.
-- **More predictable AI output**: consistent task templates and naming conventions.
-- **IDE/assistant adapters**: built-in slash-command templates for CodeBuddy/Claude Code (e.g., `/task`, `/status`, `/archive`).
+| Feature | Description |
+|:---:|---|
+| 🗂️ | **Per-project space** - Each project lives under `projects/{CODE}/` |
+| 🔗 | **Symlink integration** - Non-invasive via `ai-task/` mount point |
+| 📱 | **Cross-device sync** - `project.yaml` supports multi-device paths |
+| 🤖 | **AI native** - Built-in slash commands for CodeBuddy/Claude Code |
+| 📐 | **Template-driven** - Consistent, predictable AI output |
 
 ### Fits / Doesn’t fit
 
@@ -163,6 +191,8 @@ See [CHANGELOG.md](CHANGELOG.md) for version history and updates.
 
 <div align="center">
 
-Made with ❤️ for AI-assisted development
+Made with ❤️ by [ArnoFrost](https://github.com/ArnoFrost)
+
+[![GitHub](https://img.shields.io/badge/GitHub-ArnoFrost-181717?style=flat-square&logo=github)](https://github.com/ArnoFrost)
 
 </div>
