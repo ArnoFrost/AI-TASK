@@ -1,6 +1,7 @@
 # [标签] 任务名称
 
-**任务编号**: YYYYMMDD-NNN  
+**任务编号**: NNN (全局递增)  
+**任务文件名**: YYYYMMDD-NNN_[标签]任务名称.md  
 **创建时间**: YYYY-MM-DD HH:MM:SS  
 **负责人**: @username  
 **状态**: 🔄 进行中  
