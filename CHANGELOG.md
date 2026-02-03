@@ -7,6 +7,35 @@
 
 ---
 
+## [1.3.0] - 2026-02-03
+
+### Added
+- **三层架构演进**
+  - 核心能力层 `skills/`：对齐 agentskills.io 规范
+  - 共享命令层 `templates/shared-commands/`：IDE 无关的命令逻辑
+  - IDE 适配层 `templates/{ide}/commands/`：IDE 特定语法适配
+- **init_sub_project 命令增强**
+  - 新增 `README.md` 自动生成（协作规范）
+  - 新增软链接自动创建（`--path` 参数）
+  - 支持从路径自动提取项目代号
+- **全局任务编号规则**
+  - 任务编号全局递增（跨日期），不再按日期重置
+  - 模板和命令统一强制执行
+
+### Changed
+- **Skills 索引完善**：`skills/README.md` 补全 5 个技能（sync-templates, ddac-governance）
+- **命令文件架构调整**：IDE 命令文件保留完整逻辑（不再使用引用方式）
+- **项目结构精简**：`projects/AI-TASK/` 演进任务不再公开，仅保留入口文件
+
+### Fixed
+- **修复 .codebuddy/commands/ 同步问题**：运行层与模板层版本不一致导致命令执行不完整
+- **修复 README.md 未生成问题**：旧版 init_sub_project 缺少 README.md 生成步骤
+
+### Security
+- AI-TASK 内部演进任务脱敏处理，只公开 EXAMPLE 作为示例项目
+
+---
+
 ## [1.2.0] - 2026-01-12
 
 ### Added
@@ -95,6 +124,7 @@
 
 ---
 
+[1.3.0]: https://github.com/ArnoFrost/AI-TASK/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/ArnoFrost/AI-TASK/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/ArnoFrost/AI-TASK/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/ArnoFrost/AI-TASK/compare/v1.0.0...v1.1.0
