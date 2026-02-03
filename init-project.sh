@@ -1,6 +1,6 @@
 #!/bin/bash
 # =====================================
-# AI-TASK 项目初始化脚本 v1.0.0
+# AI-TASK 项目初始化脚本 v1.2.0
 # =====================================
 # 用法: ./init-project.sh <CODE> "<NAME>" "<PATH>" "<TECH>" [--ide IDE]
 # 示例: ./init-project.sh myapp "My App" "/Users/xxx/myapp" "React, TS" --ide both
@@ -30,7 +30,7 @@ IDE_CONFIG="both"
 
 # 打印帮助
 print_help() {
-    echo "AI-TASK 项目初始化脚本 v1.0.0"
+    echo "AI-TASK 项目初始化脚本 v1.2.0"
     echo ""
     echo "用法:"
     echo "  $0 <PROJECT_CODE> [PROJECT_NAME] [PROJECT_PATH] [TECH_STACK] [--ide IDE]"
@@ -54,7 +54,7 @@ print_help() {
 
 # 交互式输入
 interactive_mode() {
-    echo -e "${BLUE}=== AI-TASK 项目初始化 v1.0.0 ===${NC}"
+    echo -e "${BLUE}=== AI-TASK 项目初始化 v1.2.0 ===${NC}"
     echo ""
     
     read -p "项目代号 (必需): " PROJECT_CODE
@@ -346,10 +346,8 @@ EOF
 
         # 创建 .claude/commands/
         mkdir -p "$PROJECT_PATH/.claude/commands"
-        cp "$TEMPLATES_DIR/claude/commands/task.md" "$PROJECT_PATH/.claude/commands/"
-        cp "$TEMPLATES_DIR/claude/commands/init_sub_project.md" "$PROJECT_PATH/.claude/commands/"
-        echo "  $PROJECT_PATH/.claude/commands/task.md"
-        echo "  $PROJECT_PATH/.claude/commands/init_sub_project.md"
+        cp "$TEMPLATES_DIR/claude/commands/"*.md "$PROJECT_PATH/.claude/commands/"
+        echo "  $PROJECT_PATH/.claude/commands/ (全部命令)"
     fi
     
     # CodeBuddy 配置
@@ -392,10 +390,8 @@ EOF
 
         # 创建 .codebuddy/commands/
         mkdir -p "$PROJECT_PATH/.codebuddy/commands"
-        cp "$TEMPLATES_DIR/codebuddy/commands/task.md" "$PROJECT_PATH/.codebuddy/commands/"
-        cp "$TEMPLATES_DIR/codebuddy/commands/init_sub_project.md" "$PROJECT_PATH/.codebuddy/commands/"
-        echo "  $PROJECT_PATH/.codebuddy/commands/task.md"
-        echo "  $PROJECT_PATH/.codebuddy/commands/init_sub_project.md"
+        cp "$TEMPLATES_DIR/codebuddy/commands/"*.md "$PROJECT_PATH/.codebuddy/commands/"
+        echo "  $PROJECT_PATH/.codebuddy/commands/ (全部命令)"
     fi
 else
     echo -e "${YELLOW}[6/6]${NC} 跳过 IDE 配置 (未提供有效项目路径)"
@@ -421,13 +417,11 @@ if [[ -n "$PROJECT_PATH" && -d "$PROJECT_PATH" ]]; then
     echo "IDE 配置 (${IDE_CONFIG}):"
     if [[ "$IDE_CONFIG" == "claude" || "$IDE_CONFIG" == "both" ]]; then
         echo "  - $PROJECT_PATH/CLAUDE.md"
-        echo "  - $PROJECT_PATH/.claude/commands/task.md"
-        echo "  - $PROJECT_PATH/.claude/commands/init_sub_project.md"
+        echo "  - $PROJECT_PATH/.claude/commands/ (task, init_sub_project, archive, status)"
     fi
     if [[ "$IDE_CONFIG" == "codebuddy" || "$IDE_CONFIG" == "both" ]]; then
         echo "  - $PROJECT_PATH/CODEBUDDY.md"
-        echo "  - $PROJECT_PATH/.codebuddy/commands/task.md"
-        echo "  - $PROJECT_PATH/.codebuddy/commands/init_sub_project.md"
+        echo "  - $PROJECT_PATH/.codebuddy/commands/ (task, init_sub_project, archive, status)"
     fi
     echo ""
 fi
