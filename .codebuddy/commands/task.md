@@ -23,31 +23,20 @@ $ARGUMENTS
 
 ### 文件命名
 
-**先读取 `ai-task/project.yaml` 中的 `task_naming.format` 配置**，根据配置决定命名格式：
+```
+{YYYYMMDD}-{NNN}_[标签]任务名称.md
+```
 
-| format 值 | 文件名格式 | 示例 |
-|-----------|-----------|------|
-| `full` (默认) | `{YYYYMMDD}-{NNN}_[标签]任务名称.md` | `20260111-001_[功能]用户登录.md` |
-| `date` | `{YYYYMMDD}-{NNN}_任务名称.md` | `20260111-001_用户登录.md` |
-| `simple` | `{NNN}-任务名称.md` | `001-用户登录.md` |
-| `custom` | 使用 `task_naming.pattern` 自定义 | 按 pattern 生成 |
-
-**命名规则**：
 - 日期: 当天日期 YYYYMMDD
-- 序号: 根据 `task_naming.seq_digits`（默认 3 位），当日/全局从 001 开始
+- 序号: 三位数，全局递增，取 tasks/ 最大 NNN + 1
 - 标签: `[功能]` `[优化]` `[修复]` `[排查]` `[文档]` `[调研]` `[技术方案]` `[规范]`
-
-**如果 `project.yaml` 没有 `task_naming` 配置，默认使用 `full` 格式。**
 
 ### 创建任务流程
 
-1. 读取 `ai-task/project.yaml` 获取项目信息和 `task_naming` 配置
-2. 扫描 `ai-task/tasks/` 确定序号（根据 format 决定是当日序号还是全局序号）
-   - `full`/`date`: 当日序号（同一天内递增）
-   - `simple`: 全局序号（整个项目内递增）
-3. 按 `task_naming.format` 生成文件名
-4. 按模板创建任务文件
-5. 更新 `ai-task/index.md` 任务列表
+1. 读取 `ai-task/project.yaml` 获取项目信息
+2. 扫描 `ai-task/tasks/` 确定全局序号
+3. 按模板创建任务文件
+4. 更新 `ai-task/index.md` 任务列表
 
 ### 任务模板
 
@@ -144,26 +133,3 @@ $ARGUMENTS
   /task update 001 完成接口对接
   /task done 001
 ```
-
-## 任务命名配置
-
-在 `project.yaml` 中可自定义任务文件命名格式：
-
-```yaml
-task_naming:
-  # 格式选项: full | date | simple | custom
-  format: "full"
-  
-  # 自定义格式 (仅 format: "custom" 时生效)
-  # 可用变量: {DATE}, {NNN}, {TAG}, {NAME}
-  # pattern: "{DATE}-{NNN}_{TAG}{NAME}.md"
-  
-  # 序号位数 (默认 3)
-  # seq_digits: 3
-```
-
-| format | 效果 |
-|--------|------|
-| `full` | `20260111-001_[功能]用户登录.md` |
-| `date` | `20260111-001_用户登录.md` |
-| `simple` | `001-用户登录.md` |
