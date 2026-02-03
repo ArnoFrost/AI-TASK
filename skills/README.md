@@ -20,6 +20,8 @@ Skills 是包含指令、模板和规则的模块化单元，AI 可以按需加�
 | [task-management](./task-management/SKILL.md) | 任务创建、更新、查询 |
 | [project-init](./project-init/SKILL.md) | 项目初始化 |
 | [git-minimal-commit](./git-minimal-commit/SKILL.md) | 代码变动整理 |
+| [sync-templates](./sync-templates/SKILL.md) | 模板同步 |
+| [ddac-governance](./ddac-governance/SKILL.md) | DDAC 自治理规范 |
 
 ## 🔧 使用方式
 
