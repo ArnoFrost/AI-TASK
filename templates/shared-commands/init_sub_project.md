@@ -12,7 +12,7 @@ $ARGUMENTS
 
 | 参数 | 必需 | 说明 |
 |------|------|------|
-| `CODE` | ✅ | 项目代号（大写，如 MYAPP） |
+| `CODE` | ✅ | 项目代号（大写，如 MYAPP），或外部路径（自动提取最后一段作为 CODE） |
 | `--name` | ⚪ | 项目名称，默认同代号 |
 | `--tech` | ⚪ | 技术栈，逗号分隔 |
 | `--path` | ⚪ | 关联的外部项目路径（可选） |
@@ -41,7 +41,7 @@ checks:
 projects/{CODE}/
 ├── project.yaml          # 项目元数据
 ├── index.md              # 项目入口（索引 + AI 规则）
-├── README.md             # 协作规范（归档/约束）
+├── README.md             # 协作规范（归档/约束）⚠️ 必须生成
 ├── tasks/                # 任务目录
 │   └── .gitkeep
 └── docs/                 # 文档目录
@@ -145,7 +145,7 @@ _暂无已完成任务_
 - [全局规范](../../SPEC.md)
 ```
 
-### 5. 生成 README.md（协作规范）
+### 5. 生成 README.md（协作规范）⚠️ 必须生成
 
 ```markdown
 # {CODE} AI 任务入口
@@ -181,29 +181,12 @@ _暂无已完成任务_
 - 超过3天的任务自动移至 `archive/` 目录
 - 归档按**年月**分组：`archive/YYYY-MM/`
 
-**归档命令示例**：
-```bash
-# 将超过3天的任务移至归档
-mv tasks/20251211-*.md archive/2025-12/
-```
-
 ### 2. index.md 精简规则
 
 **展示原则**：
 - 仅展示**近3天**的任务列表
 - 进行中任务始终展示（无论时间）
 - 历史任务通过归档目录查看
-
-**结构约束**：
-```markdown
-## 📋 任务列表（近3天）
-### 进行中 🔄
-- [任务链接]
-### 最近完成 ✅  
-- [任务链接]
-## 📁 历史归档
-- [2025-12 归档](./archive/2025-12/)
-```
 
 ### 3. 规范自约束
 
@@ -218,13 +201,7 @@ mv tasks/20251211-*.md archive/2025-12/
 
 ## 📐 新建任务
 
-```bash
-# 命名格式
-{日期}-{序号}_[标签]任务名称.md
-
-# 示例
-20250109-001_[优化]XXX功能优化.md
-```
+命名格式: `{日期}-{序号}_[标签]任务名称.md`
 
 **编号规则**：全局递增（跨日期），查看 tasks/ 目录最大编号 +1
 
@@ -236,29 +213,45 @@ mv tasks/20251211-*.md archive/2025-12/
 - **归档任务**: archive/ 目录
 ```
 
-### 6. 初始化子项目 Git（推荐）
+### 6. 建立软链接（如提供了 --path）
+
+如果用户提供了 `--path` 参数，在外部项目目录创建软链接：
+
+```bash
+# 在外部项目创建 ai-task 软链接，指向 AI-TASK 大仓中的项目目录
+ln -s /path/to/AI-TASK/projects/{CODE} {PATH}/ai-task
+```
+
+**软链接说明**：
+- 软链接名称固定为 `ai-task`
+- 软链接指向 `projects/{CODE}` 目录
+- 外部项目通过 `ai-task/` 访问任务和文档
+
+### 7. 初始化子项目 Git（推荐）
 
 ```bash
 cd projects/{CODE} && git init && git add . && git commit -m "init: {CODE} project"
 ```
 
-### 7. 输出结果
+### 8. 输出结果
 
 ```
 ✅ 项目 {CODE} 创建完成!
 
 创建的文件:
-  - projects/{CODE}/project.yaml
-  - projects/{CODE}/index.md
-  - projects/{CODE}/README.md
+  - projects/{CODE}/project.yaml    # 项目元数据
+  - projects/{CODE}/index.md        # 项目入口
+  - projects/{CODE}/README.md       # 协作规范
   - projects/{CODE}/tasks/.gitkeep
   - projects/{CODE}/docs/.gitkeep
 
+关联路径:
+  - {PATH}  (如果提供了 --path)
+
 下一步:
-  1. 编辑 projects/{CODE}/project.yaml 补充项目信息
-  2. 初始化 Git: cd projects/{CODE} && git init
-  3. 使用 /task create 创建任务
-  4. 如需关联外部项目，创建软链接: ln -s
+  1. 编辑 projects/{CODE}/project.yaml 补充技术栈等项目信息
+  2. 使用 /task create 创建任务
+  3. 如需在外部项目目录建立软链接，运行 ./init-project.sh
 ```
 
 ## 帮助信息
@@ -269,18 +262,12 @@ cd projects/{CODE} && git init && git add . && git commit -m "init: {CODE} proje
   /init_sub_project <CODE>                    创建新项目
   /init_sub_project <CODE> --name NAME        指定项目名称
   /init_sub_project <CODE> --tech "A, B"      指定技术栈
-  /init_sub_project <CODE> --path /path/to    关联外部路径
+  /init_sub_project <CODE> --path /path/to    关联外部路径并建立软链接
+  /init_sub_project /path/to/project          从路径提取 CODE 并关联
 
 示例:
   /init_sub_project MYAPP
   /init_sub_project MYAPP --name "我的应用" --tech "React, TypeScript"
   /init_sub_project DEMO --path ~/Projects/demo
+  /init_sub_project /Users/xuxin/Desktop/Geek/AI/Animate/DemoGLTF
 ```
-
-## 与其他命令的关系
-
-| 场景 | 推荐命令 |
-|------|----------|
-| 在 AI-TASK 大仓内创建新项目 | `/init_sub_project CODE` |
-| 将外部项目接入 AI-TASK | `./init-project.sh` (Shell) |
-| 在已接入项目的子目录创建子项目 | 在外部项目内执行 `/init_sub_project` |
