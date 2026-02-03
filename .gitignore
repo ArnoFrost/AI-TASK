@@ -31,22 +31,28 @@ local.config.md
 
 # 忽略 projects 下的所有项目目录
 projects/*/
-# 但保留 EXAMPLE 目录（示例项目）
+
+# 但保留 EXAMPLE 目录（示例项目，完整公开）
 !projects/EXAMPLE/
-# 保留 AI-TASK 目录（本项目自身）
+
+# 保留 AI-TASK 目录结构（仅入口文件，不公开演进任务）
 !projects/AI-TASK/
-
-# 子项目任务目录（即使 EXAMPLE 也不提交任务内容）
-projects/*/tasks/
-projects/*/docs/
-projects/*/archive/
-# 但保留 AI-TASK 自身的任务（本项目任务需要公开）
+!projects/AI-TASK/index.md
+!projects/AI-TASK/project.yaml
+!projects/AI-TASK/README.md
 !projects/AI-TASK/tasks/
+!projects/AI-TASK/tasks/.gitkeep
 !projects/AI-TASK/docs/
-# 保留 EXAMPLE 的任务（作为示例展示）
-!projects/EXAMPLE/tasks/
+!projects/AI-TASK/docs/.gitkeep
 
-# 保留目录结构
+# AI-TASK 演进任务不公开（内部使用）
+projects/AI-TASK/tasks/*.md
+!projects/AI-TASK/tasks/.gitkeep
+projects/AI-TASK/docs/*.md
+!projects/AI-TASK/docs/.gitkeep
+projects/AI-TASK/archive/
+
+# 保留目录结构占位符
 !projects/*/tasks/.gitkeep
 !projects/*/docs/.gitkeep
 

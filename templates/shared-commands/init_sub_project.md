@@ -41,7 +41,7 @@ checks:
 projects/{CODE}/
 ├── project.yaml          # 项目元数据
 ├── index.md              # 项目入口（索引 + AI 规则）
-├── README.md             # 协作规范（归档/约束）
+├── README.md             # 协作规范（归档/约束）⚠️ 必须生成
 ├── tasks/                # 任务目录
 │   └── .gitkeep
 └── docs/                 # 文档目录
