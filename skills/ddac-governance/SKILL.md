@@ -52,29 +52,18 @@ projects/{PROJECT}/  = 项目自治空间
 
 ## 路书四大法则
 
+> 详见 [SPEC.md 路书法则](../../SPEC.md)
+
 | 法则 | 执行要点 |
 |------|---------|
 | **倒排** | 最新任务在前 |
 | **归档** | 完成即归档，活跃 ≤ 3 |
 | **更新** | 实时更新进度 |
-| **格式** | `YYYYMMDD-NNN_[TAG]NAME.md` |
+| **格式** | `YYYYMMDD-NNN_[TAG]NAME.md`，NNN 全局递增（详见 [SPEC.md](../../SPEC.md#命名规范)） |
 
 ## 任务文档结构
 
-```markdown
-# [标签] 任务名称
-
-**任务编号**: YYYYMMDD-NNN
-**状态**: 🔄 进行中 / ✅ 已完成
-**优先级**: 🔴 高 / 🟡 中 / 🟢 低
-
-## 📋 任务目标
-- [ ] 目标 1
-- [ ] 目标 2
-
-## 📊 进度记录
-| 时间 | 进度 | 说明 |
-```
+详见 [templates/task-template.md](../../templates/task-template.md)（唯一权威模板）
 
 ## 协作闭环
 
