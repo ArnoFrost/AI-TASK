@@ -7,6 +7,30 @@
 
 ---
 
+## [1.3.1] - 2026-02-12
+
+### Changed
+- **指令块格式升级**：所有模板和公开项目的 `<!-- AI-AUTO-TASK -->` HTML 注释升级为 `<ai-task-context>` XML 标签
+  - Anthropic 最佳实践推荐 XML 标签作为结构化指令格式
+  - HTML 注释语义为"忽略"，与"必须遵循"的指令含义矛盾
+  - 主流模型（Claude/GPT/Gemini）对 XML 标签遵循度更高
+- **规范碎片化修复 — Single Source of Truth**
+  - 编号规则（全局递增）在 `SPEC.md` 中增加显式定义，5+ 处引用统一指向 SPEC
+  - 任务模板从 5 个文件的内联定义（共 277 行）收敛为引用 `templates/task-template.md`
+  - 标签列表从 6-12 个不等统一对齐 SPEC 12 标签，命令文件改为引用链接
+- **`init-project.sh` 模板化**：index.md 生成从 heredoc 改为 `sed` 模板替换，保留 fallback
+- **EXAMPLE 完整生命周期**：新增"进行中"示例任务 + 已完成任务归档至 `archive/2026-01/`
+- **`ddac-governance/SKILL.md` 引用化**：内联模板和规则描述改为引用 SPEC.md 和 task-template.md
+
+### Fixed
+- README.md 版本号从 1.2.0 修正为 1.3.0
+- CODEBUDDY.md 版本号从 1.2.0 修正为 1.3.0
+- `skills/task-management/SKILL.md` 编号规则从"每日重置"修正为"全局递增"
+- `.gitignore` 新增 `.claude/settings.local.json` 忽略规则
+- `.gitignore` 新增 EXAMPLE/archive 例外规则以公开归档示例
+
+---
+
 ## [1.3.0] - 2026-02-03
 
 ### Added
@@ -124,6 +148,7 @@
 
 ---
 
+[1.3.1]: https://github.com/ArnoFrost/AI-TASK/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/ArnoFrost/AI-TASK/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/ArnoFrost/AI-TASK/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/ArnoFrost/AI-TASK/compare/v1.1.0...v1.1.1

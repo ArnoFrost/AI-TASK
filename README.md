@@ -10,7 +10,7 @@
 [![GitHub forks](https://img.shields.io/github/forks/ArnoFrost/AI-TASK?style=flat-square&logo=github)](https://github.com/ArnoFrost/AI-TASK/network)
 [![GitHub last commit](https://img.shields.io/github/last-commit/ArnoFrost/AI-TASK?style=flat-square)](https://github.com/ArnoFrost/AI-TASK/commits)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.3.0-green.svg?style=flat-square)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.3.1-green.svg?style=flat-square)](CHANGELOG.md)
 [![DDAC](https://img.shields.io/badge/Powered%20by-DDAC-blueviolet?style=flat-square&logo=bookstack)](https://github.com/ArnoFrost/DDAC)
 
 <p>
@@ -63,7 +63,7 @@
 
 ---
 
-**想先看效果？** 查看示例任务：[projects/EXAMPLE/tasks/](./projects/EXAMPLE/tasks/)
+**想先看效果？** 查看示例项目：[projects/EXAMPLE/](./projects/EXAMPLE/)（含进行中任务 + 归档示例）
 
 ---
 
