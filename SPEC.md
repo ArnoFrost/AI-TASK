@@ -168,6 +168,11 @@ mv tasks/20251211-001_*.md archive/2025-12/
 | `simple` | `{SEQ}-NAME.md` | `001-用户登录.md` |
 | `custom` | 自定义 pattern | 按 `task_naming.pattern` 生成 |
 
+**编号规则**：
+- 序号（NNN）**全局递增**，不按日期重置
+- 新任务编号 = 当前 `tasks/` 目录中最大 NNN + 1
+- 若目录为空则从 `001` 开始
+
 **配置示例**（在 `project.yaml` 中）：
 
 ```yaml
