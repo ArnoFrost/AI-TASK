@@ -1,6 +1,6 @@
 #!/bin/bash
 # =====================================
-# AI-TASK 项目初始化脚本 v1.2.0
+# AI-TASK 项目初始化脚本 v1.3.0
 # =====================================
 # 用法: ./init-project.sh <CODE> "<NAME>" "<PATH>" "<TECH>" [--ide IDE]
 # 示例: ./init-project.sh myapp "My App" "/Users/xxx/myapp" "React, TS" --ide both
@@ -170,9 +170,40 @@ metadata:
   description: 项目描述
 EOF
 
-# 3. 创建 index.md
+# 3. 创建 index.md（基于模板生成）
 echo -e "${GREEN}[3/6]${NC} 创建项目入口 index.md..."
-cat > "$PROJECT_DIR/index.md" << EOF
+TEMPLATE_INDEX="$TEMPLATES_DIR/project-index.md"
+if [[ -f "$TEMPLATE_INDEX" ]]; then
+  sed -e "s/{PROJECT_CODE}/$PROJECT_CODE/g" \
+      -e "s/{PROJECT_NAME}/$PROJECT_NAME/g" \
+      -e "s/{TECH_STACK:-待补充}/${TECH_STACK:-待补充}/g" \
+      -e "s/Tech1, Tech2/${TECH_STACK:-待补充}/g" \
+      -e "s/YYYY-MM-DD/$TODAY/g" \
+      "$TEMPLATE_INDEX" > "$PROJECT_DIR/index.md"
+else
+  echo -e "${YELLOW}  警告: 模板文件 $TEMPLATE_INDEX 不存在，使用内置最小模板${NC}"
+  cat > "$PROJECT_DIR/index.md" << EOF
+<ai-task-context project="$PROJECT_CODE">
+
+## 自动行为（无需用户指令）
+1. **阅读任务列表** - 了解当前进度，避免重复工作
+2. **自动创建任务** - 用户描述需求时，自动生成任务文档到 tasks/
+3. **自动命名编号** - 格式: {DATE}-{SEQ}_[标签]名称.md，用户无需关心
+4. **自动更新状态** - 任务完成后更新本文件任务列表
+
+## 任务文档自动生成规则
+- 文件名: YYYYMMDD-NNN_[标签]任务名.md (AI自动生成)
+- 标签: 根据任务内容自动判断（详见 ../../SPEC.md#标签类型）
+- 编号: **全局递增，不按日期重置**，取 tasks/ 目录最大 NNN + 1
+
+## 用户只需要
+- 描述要做什么（自然语言）
+- AI 自动完成：创建任务 → 执行 → 更新状态 → 提交
+
+规范详见：../../SPEC.md
+
+</ai-task-context>
+
 # $PROJECT_NAME
 
 > 项目简要描述
@@ -185,17 +216,6 @@ cat > "$PROJECT_DIR/index.md" << EOF
 | **本地路径** | 见 [project.yaml](./project.yaml) |
 | **主要技术栈** | ${TECH_STACK:-待补充} |
 | **创建时间** | $TODAY |
-
----
-
-## 🏗️ 项目结构
-
-\`\`\`
-project-root/
-├── ai-task/                 # AI 协作入口 (软链接)
-├── src/                     # 源代码
-└── ...
-\`\`\`
 
 ---
 
@@ -219,23 +239,8 @@ _暂无已完成任务_
 - [文档目录](./docs/)
 - [项目元数据](./project.yaml)
 - [全局规范](../../SPEC.md)
-
----
-
-## 📊 统计信息
-
-| 统计项 | 数量 |
-|--------|------|
-| 总任务数 | 0 |
-| 进行中 | 0 |
-| 已完成 | 0 |
-
----
-
-## 📝 备注
-
-> 项目特殊说明或注意事项
 EOF
+fi
 
 # 4. 创建规则文件 (可选)
 echo -e "${GREEN}[4/6]${NC} 创建项目规则 rules/$PROJECT_CODE.md..."
