@@ -22,6 +22,8 @@ Skills 是包含指令、模板和规则的模块化单元，AI 可以按需加�
 | [git-minimal-commit](./git-minimal-commit/SKILL.md) | 代码变动整理 |
 | [sync-templates](./sync-templates/SKILL.md) | 模板同步 |
 | [ddac-governance](./ddac-governance/SKILL.md) | DDAC 自治理规范 |
+| [complex-task-workspace](./complex-task-workspace/SKILL.md) | 复杂任务工作区（多文档/多阶段目录约定） |
+| [agent-team-review](./agent-team-review/SKILL.md) | 多角色协作评审（总分总结构） |
 
 ## 🔧 使用方式
 
