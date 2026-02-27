@@ -15,6 +15,11 @@
 - 描述要做什么（自然语言）
 - AI 自动完成：创建任务 → 执行 → 更新状态 → 提交
 
+## 可选技能（取消注释以启用）
+# skills:
+#   - agent-team-review        # 多角色协作评审
+#   - complex-task-workspace   # 复杂任务工作区
+
 规范详见：../../SPEC.md
 
 </ai-task-context>

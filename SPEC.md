@@ -247,6 +247,37 @@ skills/
 | task-management | 任务创建、更新、查询 |
 | project-init | 初始化项目配置 |
 | git-minimal-commit | 最小化提交整理 |
+| ddac-governance | DDAC 自治理规范 |
+| sync-templates | 模板同步 |
+
+### 可选技能
+
+| 技能 | 说明 |
+|------|------|
+| complex-task-workspace | 复杂任务工作区（多文档/多阶段目录约定） |
+| agent-team-review | 多角色协作评审（总分总结构） |
+
+### 项目级 skill 引用
+
+项目可在 `index.md` 的 `<ai-task-context>` 中声明启用可选 skill：
+
+```xml
+<ai-task-context project="XXX">
+...
+## 可选技能
+skills:
+  - agent-team-review
+  - complex-task-workspace
+</ai-task-context>
+```
+
+**引用规则**：
+
+| 场景 | 行为 |
+|------|------|
+| 未声明 `skills` | 只使用默认内置技能 |
+| 声明了 `skills` | AI 在该项目上下文中自动激活对应 skill |
+| 对话中触发词匹配 | 用户可在对话中通过触发词临时激活任何 skill，无需项目声明 |
 
 ---
 
