@@ -40,12 +40,12 @@ checks:
 
 ```yaml
 archive:
-  source: ai-task/tasks/{任务文件}
-  target: ai-task/archive/{YYYY-MM}/{任务文件}
-  
+  source: ai-task/tasks/{任务文件或文件夹}
+  target: ai-task/archive/{YYYY-MM}/{任务文件或文件夹}
+
   steps:
     - 创建目标月份目录 (如不存在)
-    - 移动任务文件
+    - 移动任务文件或文件夹（文件夹任务整体移动，保持内部结构不变）
     - 更新 ai-task/index.md 任务列表
 ```
 
@@ -54,11 +54,14 @@ archive:
 ```
 ai-task/
 ├── tasks/                    # 活跃任务
-│   └── 20260110-001_xxx.md
+│   ├── 20260110-001_xxx.md                   # 单文件任务
+│   └── 20260226-001_[专项]某某专项/          # 文件夹任务
+│       ├── task_plan.md
+│       └── task_1_xxx.md
 └── archive/                  # 归档任务
     ├── 2025-12/
     │   ├── 20251211-001_xxx.md
-    │   └── 20251215-002_xxx.md
+    │   └── 20251215-002_[专项]某某专项/      # 文件夹任务整体归档
     └── 2026-01/
         └── 20260105-001_xxx.md
 ```
