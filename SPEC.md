@@ -54,7 +54,12 @@ AI-TASK/                          # 协作中心 (iCloud 同步)
 ├── project.yaml          # 必需：项目元数据 (v2)
 ├── index.md              # 必需：项目入口文档
 ├── tasks/                # 必需：任务文件目录
-│   └── {DATE}-{SEQ}_[TAG]NAME.md
+│   ├── {DATE}-{SEQ}_[TAG]NAME.md          # 单文件任务
+│   └── {DATE}-{SEQ}_[TAG]NAME/            # 文件夹任务（预期产出 ≥2 文档）
+│       ├── task_plan.md                   # 入口（必须，统一命名）
+│       ├── task_1_{主题}.md               # 子文件，平铺根部
+│       ├── task_2_{主题}.md
+│       └── artifacts/ notes/ templog/    # 可选扩展子目录
 ├── docs/                 # 可选：项目文档
 └── archive/              # 可选：已完成任务归档
     └── YYYY-MM/
