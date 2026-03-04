@@ -84,7 +84,7 @@ cp templates/project-index.md projects/{PROJECT}/index.md
 # 使用斜杠命令
 /task create [功能] 用户登录模块
 
-# 或手动复制模板（NNN 为全局递增，取 tasks/ 最大 NNN + 1）
+# 或手动复制模板（NNN 为日内递增，取当天最大 NNN + 1）
 cp templates/task-template.md projects/{PROJECT}/tasks/YYYYMMDD-NNN_[标签]名称.md
 ```
 

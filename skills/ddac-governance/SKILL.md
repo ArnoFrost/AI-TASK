@@ -59,7 +59,7 @@ projects/{PROJECT}/  = 项目自治空间
 | **倒排** | 最新任务在前 |
 | **归档** | 完成即归档，活跃 ≤ 3 |
 | **更新** | 实时更新进度 |
-| **格式** | `YYYYMMDD-NNN_[TAG]NAME.md`，NNN 全局递增（详见 [SPEC.md](../../SPEC.md#命名规范)） |
+| **格式** | `YYYYMMDD-NNN_[TAG]NAME.md`，NNN 日内递增（详见 [SPEC.md](../../SPEC.md#命名规范)） |
 
 ## 任务文档结构
 
