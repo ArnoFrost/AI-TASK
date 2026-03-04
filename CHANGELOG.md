@@ -7,6 +7,25 @@
 
 ---
 
+## [1.4.0] - 2026-03-04
+
+### Added
+- **Frontmatter Schema 规范**：任务文档必须包含 `date/status/type/tags/related` YAML 头部
+- **文件夹任务约束**：`task_plan.md` ≤300 行限制，超过必须拆分子文件
+- **project.yaml 增强**：新增 `allowed_tags` 标签子集配置和 `task_constraints` 约束配置
+- **4 个高频标签**：`[评审]` `[架构]` `[集成]` `[同步]`，核心标签从 12→16 个
+
+### Changed
+- **编号规则修正**：从"全局递增"改为"日内递增"（每天从 001 开始），30+ 文件同步
+- **index.md 职责精简**：AI 指令块从 ~25 行收敛为 7 行，重复内容下放至 README.md
+- **标签硬约束**：新增"不得自行创造新标签"规则，所有命令/模板/技能同步
+- **EXAMPLE 示例项目**：归档任务和进行中任务均补充 YAML frontmatter
+
+### Removed
+- 移除过时的 `templates/claude/commands/status.md` 命令文件
+
+---
+
 ## [1.3.1] - 2026-02-12
 
 ### Changed
@@ -148,6 +167,7 @@
 
 ---
 
+[1.4.0]: https://github.com/ArnoFrost/AI-TASK/compare/v1.3.1...v1.4.0
 [1.3.1]: https://github.com/ArnoFrost/AI-TASK/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/ArnoFrost/AI-TASK/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/ArnoFrost/AI-TASK/compare/v1.1.1...v1.2.0
