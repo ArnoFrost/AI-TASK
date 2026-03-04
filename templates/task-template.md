@@ -1,6 +1,14 @@
+---
+date: YYYY-MM-DD
+status: in-progress
+type: 标签
+tags: []
+related: []
+---
+
 # [标签] 任务名称
 
-**任务编号**: NNN (全局递增)  
+**任务编号**: NNN (日内递增)  
 **任务文件名**: YYYYMMDD-NNN_[标签]任务名称.md  
 **创建时间**: YYYY-MM-DD HH:MM:SS  
 **负责人**: @username  
