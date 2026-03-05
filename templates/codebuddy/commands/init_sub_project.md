@@ -41,7 +41,7 @@ checks:
 projects/{CODE}/
 ├── project.yaml          # 项目元数据
 ├── index.md              # 项目入口（索引 + AI 规则）
-├── README.md             # 协作规范（归档/约束）
+├── README.md             # 协作规范（归档/约束）⚠️ 必须生成
 ├── tasks/                # 任务目录
 │   └── .gitkeep
 └── docs/                 # 文档目录
@@ -76,6 +76,12 @@ related: []
 
 metadata:
   description: {NAME}
+
+# 任务约束配置
+task_constraints:
+  task_plan_max_lines: 300
+  max_active_tasks: 15
+  archive_after_days: 3
 
 # 模板同步配置
 sync:
@@ -112,9 +118,7 @@ sync:
 
 ---
 
-## 📋 任务列表
-
-> 按时间倒序排列
+## 📋 任务列表（近3天）
 
 ### 进行中 🔄
 
@@ -126,10 +130,17 @@ _暂无已完成任务_
 
 ---
 
+## 📁 历史归档
+
+_暂无归档_
+
+---
+
 ## 🔗 快捷链接
 
 - [任务目录](./tasks/)
 - [文档目录](./docs/)
+- [项目元数据](./project.yaml)
 - [协作规范](./README.md)
 - [全局规范](../../SPEC.md)
 ```
@@ -165,7 +176,7 @@ _暂无已完成任务_
 
 **统一编号格式**：`YYYYMMDD-NNN_[标签]任务名称`
 
-编号**日内递增**（每天从 001 开始），查看 `tasks/` 目录当天最大编号 +1。
+编号**全局递增**（跨日期连续编号），查看 `tasks/` 目录最大编号 +1。
 
 **标签**：根据任务内容自动判断（详见 [SPEC.md 标签类型](../../SPEC.md#标签类型)），不得自行创造新标签
 
