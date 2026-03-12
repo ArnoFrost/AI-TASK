@@ -14,11 +14,15 @@
 - **review_actions.yaml**: 评审行动项索引 schema
 - **AGENT.md**: 通用 AI 协作入口模板（IDE 无关）
 - **init-project.sh 多 IDE 支持**: 交互式选择 Claude Code / CodeBuddy / Cursor / 通用
+- **skills/task-review**: 开源单视角评审技能（结构/可执行性/风险合一）
+- **skills/task-init**: 开源项目初始化技能（生成 project.yaml / index.md / README.md）
+- **install-skills.sh**: 全局技能注入脚本，支持 claude / codebuddy / codex / gemini 等 IDE
 
 ### Changed
+- **开源完备性**: 清理遗留文件（`.codebuddy/rules/`、`sync-templates.sh`、`skills/ddac-governance/`、`skills/complex-task-workspace/`），更新贡献指南，文档化开源边界
+- **Skills 架构升级**: `skills/` 从纯规范参考层升级为包含开源精简技能 + 规范参考
 - **编号规则修正**: 回退为全局递增（修正 v1.4.0 引入的日内递增）
 - **templates/ 精简**: 移除 IDE 斜杠命令层，保留核心模板
-- **Skills 架构精简**: `skills/` 收敛为纯规范参考层
 - **init-project.sh 重写**: 交互式多 IDE 适配，不再生成斜杠命令目录
 - **relink.sh 模板化**: LINK_MAP 外置为 local config
 

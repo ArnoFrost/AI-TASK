@@ -67,28 +67,24 @@ AI-TASK is a **file-system convention for AI collaboration**. It standardizes wh
 
 ```mermaid
 graph LR
-    subgraph "DDAC Methodology"
-        D1[📚 Theory]
-        D2[🏗️ 4-Layer Arch]
-        D3[📝 17 Meta-Prompts]
+    subgraph DDAC["DDAC Methodology"]
+        D1["Theory"]
+        D2["4-Layer Arch"]
+        D3["17 Meta-Prompts"]
     end
 
-    subgraph "AI-TASK Implementation"
-        A1[📂 Project Structure]
-        A2[📋 Task Templates]
-        A3[🤖 AGENT.md]
+    subgraph AITASK_IMPL["AI-TASK Implementation"]
+        A1["Project Structure"]
+        A2["Task Templates"]
+        A3["AGENT.md"]
     end
 
     D1 -->|guides| A1
     D2 -->|implements| A2
     D3 -->|applies| A3
 
-    style D1 fill:#e1f5fe
-    style D2 fill:#e1f5fe
-    style D3 fill:#e1f5fe
-    style A1 fill:#fff3e0
-    style A2 fill:#fff3e0
-    style A3 fill:#fff3e0
+    style DDAC fill:#e1f5fe,stroke:#90caf9
+    style AITASK_IMPL fill:#fff3e0,stroke:#ffcc80
 ```
 
 It is designed primarily for **solo developers** who work on many repositories and switch between devices (e.g., iCloud/drive sync), and want their AI assistant to follow the same workflow everywhere.
@@ -167,44 +163,35 @@ Help me implement user login
 
 ```mermaid
 graph TB
-    subgraph "AI-TASK Repository"
-        AITASK[AI-TASK/]
-        PROJECTS[projects/]
-        SKILLS[skills/]
-        RULES[rules/]
-        TEMPLATES[templates/]
-        TOOLS[tools/]
+    subgraph REPO["AI-TASK Repository"]
+        direction TB
+        PROJECTS["projects/"]
+        SKILLS["skills/"]
+        TEMPLATES["templates/"]
+        TOOLS["tools/"]
 
-        AITASK --> PROJECTS
-        AITASK --> SKILLS
-        AITASK --> RULES
-        AITASK --> TEMPLATES
-        AITASK --> TOOLS
-
-        subgraph "Project Spaces"
-            P1[PROJECT_A/]
-            P2[PROJECT_B/]
-            P1 --> P1T[tasks/]
-            P1 --> P1D[docs/]
-            P2 --> P2T[tasks/]
-            P2 --> P2D[docs/]
+        subgraph SPACES["Project Spaces"]
+            P1["PROJECT_A/"] --> P1T["tasks/"]
+            P1 --> P1D["docs/"]
+            P2["PROJECT_B/"] --> P2T["tasks/"]
+            P2 --> P2D["docs/"]
         end
 
         PROJECTS --> P1
         PROJECTS --> P2
     end
 
-    subgraph "Your Repos"
-        EXT1[~/Projects/app-a/]
-        EXT2[~/Projects/app-b/]
-
-        EXT1 -.->|symlink| P1
-        EXT2 -.->|symlink| P2
+    subgraph REAL["Your Repos"]
+        EXT1["~/Projects/app-a/"]
+        EXT2["~/Projects/app-b/"]
     end
 
-    style AITASK fill:#e1f5fe
-    style PROJECTS fill:#fff3e0
-    style SKILLS fill:#f3e5f5
+    EXT1 -.->|"symlink"| P1
+    EXT2 -.->|"symlink"| P2
+
+    style REPO fill:#e1f5fe,stroke:#90caf9
+    style SPACES fill:#fff3e0,stroke:#ffcc80
+    style REAL fill:#f3e5f5,stroke:#ce93d8
 ```
 
 ---

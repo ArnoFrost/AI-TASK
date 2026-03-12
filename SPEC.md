@@ -316,35 +316,33 @@ skills/
 │   └── assets/               # 可选：静态资源
 ```
 
-### 规范参考（仓库内）
+### 技能体系
 
-仓库 `skills/` 仅保留纯规范参考，不含可执行逻辑：
+仓库 `skills/` 包含开源可用的精简技能和 SKILL.md 编写规范，高级可执行技能通过个人技能库（如 `my-claude-skills/`）管理。
 
-| 技能 | 说明 |
-|------|------|
-| ddac-governance | DDAC 自治理协议（纯规范） |
-| complex-task-workspace | 文件夹任务目录约定（纯规范） |
-
-### 推荐个人技能（外部）
-
-可执行技能通过个人技能库（如 `my-claude-skills/`）管理，以下为推荐配套技能：
+开源技能（通过 `install-skills.sh` 注入 IDE）：
 
 | 技能 | 触发 | 说明 |
 |------|------|------|
-| ai-task-review | `/ai-task-review` | AI-TASK 工程专属多角色协作评审 |
-| ai-task-init | `/ai-task-init` | 项目初始化 / 规范对齐 |
+| task-review | `/task-review` | 单视角评审（结构/可执行性/风险合一） |
+| task-init | `/task-init` | 项目初始化 / 规范对齐 |
+
+推荐个人技能（增强版）：
+
+| 技能 | 触发 | 说明 |
+|------|------|------|
+| ai-task-review | `/ai-task-review` | 多角色协作评审（总分总结构） |
+| ai-task-init | `/ai-task-init` | 项目初始化（增强版，含 vault 路径探测） |
 | ai-task-sync | `/ai-task-sync` | 增量同步已有项目到最新规范 |
 | commit | `/commit` | Conventional Commits 提交 |
 
-### 项目级 skill 引用
+### 项目级技能引用
 
-项目可在 `index.md` 的 `<ai-task-context>` 中声明启用规范参考 skill：
+项目可在 `index.md` 的 `<ai-task-context>` 中声明使用的个人技能：
 
 ```xml
 <ai-task-context project="XXX">
 ...
-skills:
-  - complex-task-workspace
 notes:
   - 评审使用个人技能 /ai-task-review
   - 项目对齐使用 /ai-task-init 或 /ai-task-sync
@@ -355,7 +353,6 @@ notes:
 
 | 场景 | 行为 |
 |------|------|
-| 声明了 `skills` | AI 在该项目上下文中自动激活对应规范参考 |
 | `notes` 字段 | 提示用户使用对应个人技能 |
 | 对话中触发词匹配 | 用户可通过 `/ai-task-review` 等斜杠命令直接调用 |
 
