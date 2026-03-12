@@ -10,13 +10,12 @@
 [![GitHub forks](https://img.shields.io/github/forks/ArnoFrost/AI-TASK?style=flat-square&logo=github)](https://github.com/ArnoFrost/AI-TASK/network)
 [![GitHub last commit](https://img.shields.io/github/last-commit/ArnoFrost/AI-TASK?style=flat-square)](https://github.com/ArnoFrost/AI-TASK/commits)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.3.1-green.svg?style=flat-square)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.5.0-green.svg?style=flat-square)](CHANGELOG.md)
 [![DDAC](https://img.shields.io/badge/Powered%20by-DDAC-blueviolet?style=flat-square&logo=bookstack)](https://github.com/ArnoFrost/DDAC)
 
 <p>
   <a href="#-快速开始3-分钟">快速开始</a> •
   <a href="#-架构设计">架构</a> •
-  <a href="#-可用命令">命令</a> •
   <a href="./SPEC.md">规范</a> •
   <a href="./CHANGELOG.md">更新日志</a>
 </p>
@@ -34,7 +33,7 @@
 - [快速开始](#-快速开始3-分钟)
 - [架构设计](#-架构设计)
 - [目录结构](#-目录结构)
-- [可用命令](#-可用命令)
+- [任务标签](#-任务标签)
 - [软链接工作原理](#-软链接工作原理)
 - [文档](#-文档)
 - [已知局限](#️-已知局限保持小而美)
@@ -80,17 +79,17 @@ graph LR
         D2[🏗️ 四层架构]
         D3[📝 17个元Prompt]
     end
-    
+
     subgraph "AI-TASK 落地"
         A1[📂 项目结构]
-        A2[⚡ 斜杠命令]
-        A3[📋 任务模板]
+        A2[📋 任务模板]
+        A3[🤖 AGENT.md]
     end
-    
+
     D1 -->|指导| A1
     D2 -->|实现| A2
     D3 -->|应用| A3
-    
+
     style D1 fill:#e1f5fe
     style D2 fill:#e1f5fe
     style D3 fill:#e1f5fe
@@ -108,7 +107,7 @@ graph LR
 | 🗂️ | **跨项目协作空间** - 每个项目在 `projects/{CODE}/` 下独立管理 |
 | 🔗 | **软链接集成** - 通过 `ai-task/` 无侵入式接入现有项目 |
 | 📱 | **跨设备同步** - `project.yaml` 支持多设备路径映射 |
-| 🤖 | **AI 原生** - 内置 CodeBuddy/Claude Code 斜杠命令 |
+| 🤖 | **多 IDE 适配** - 支持 Claude Code / CodeBuddy / Cursor / 通用 AGENT.md |
 | 📐 | **模板驱动** - 统一任务模板，输出可控可复用 |
 
 ### 适用 / 不适用
@@ -156,25 +155,30 @@ git clone https://github.com/ArnoFrost/AI-TASK.git ~/AI-TASK
 
 ```bash
 cd ~/AI-TASK
-./init-project.sh MYAPP "我的应用" "/Users/xxx/Projects/myapp" "React, TypeScript"
 
-# 或使用交互模式
+# 交互模式（推荐）
 ./init-project.sh
+
+# 或指定参数
+./init-project.sh myapp --name "My App" --path "/path/to/myapp" --tech "React,TS"
 ```
 
 这会创建：
 
 - `projects/MYAPP/`（含 `project.yaml`、`index.md`、`tasks/`、`docs/`）
 - 可选：在你的项目根目录生成 `ai-task/` 软链接
-- 可选：生成 IDE 配置（Claude Code / CodeBuddy）
+- 可选：生成 AI IDE 配置（AGENT.md / Claude Code / CodeBuddy / Cursor）
 
-### 3. 在 AI 助手中使用命令
+### 3. 开始协作
+
+在 AI 助手中引入项目入口：
 
 ```
-/task create [功能] 用户登录模块
-/task list
-/status
+@projects/MYAPP/index.md
+帮我实现用户登录功能
 ```
+
+> 💡 斜杠命令通过个人技能库扩展，详见 [skills/README.md](./skills/README.md)
 
 ---
 
@@ -188,11 +192,13 @@ graph TB
         SKILLS[skills/]
         RULES[rules/]
         TEMPLATES[templates/]
+        TOOLS[tools/]
 
         AITASK --> PROJECTS
         AITASK --> SKILLS
         AITASK --> RULES
         AITASK --> TEMPLATES
+        AITASK --> TOOLS
 
         subgraph "项目协作空间"
             P1[项目A/]
@@ -229,7 +235,8 @@ AI-TASK/
 ├── README.md                 # 本文件
 ├── README_EN.md              # English version
 ├── SPEC.md                   # 完整规范
-├── init-project.sh           # 项目初始化脚本
+├── AGENT.md / CODEBUDDY.md   # AI 协作入口（IDE 适配）
+├── init-project.sh           # 项目初始化脚本（交互式多 IDE）
 ├── projects/                 # 项目协作空间目录
 │   └── {PROJECT}/
 │       ├── project.yaml      # 项目元数据（含跨设备路径）
@@ -237,26 +244,18 @@ AI-TASK/
 │       ├── tasks/            # 任务文件
 │       ├── docs/             # 文档目录
 │       └── archive/          # 归档目录（可选）
-├── skills/                   # AI 技能定义
+├── skills/                   # 规范参考（纯规范层）
 ├── rules/                    # 项目规则
-├── templates/                # 模板库
-│   ├── claude/               # Claude Code 模板
-│   └── codebuddy/            # CodeBuddy 模板
-└── .codebuddy/commands/      # CodeBuddy 斜杠命令
+├── templates/                # 核心模板库
+│   ├── AGENT.md              # 通用 AI 协作入口模板
+│   ├── project.yaml          # 项目元数据模板
+│   ├── project-index.md      # 项目入口模板
+│   ├── task-template.md      # 任务文档模板
+│   └── ...
+└── tools/                    # 工具脚本
+    ├── validate_obsidian.py  # Obsidian 格式校验
+    └── relink.sh → ../relink.sh
 ```
-
----
-
-## 🔧 可用命令
-
-| 命令 | 说明 |
-|------|------|
-| `/init_sub_project CODE` | 在仓库中创建新项目 |
-| `/task create [标签] 名称` | 创建新任务 |
-| `/task list` | 列出所有任务 |
-| `/task done 编号` | 标记任务完成 |
-| `/archive 编号` | 归档已完成任务 |
-| `/status` | 查看项目状态 |
 
 ---
 
@@ -270,6 +269,8 @@ AI-TASK/
 | `[技术方案]` | 方案设计 | `[规范]` | 规范制定 |
 | `[下线]` | 功能下线 | `[清理]` | 代码清理 |
 | `[梳理]` | 逻辑梳理 | `[测试]` | 测试相关 |
+| `[评审]` | 代码/方案评审 | `[架构]` | 架构设计 |
+| `[集成]` | 模块集成 | `[同步]` | 技术摘要同步 |
 
 ---
 
@@ -307,8 +308,9 @@ flowchart LR
 ## 📖 文档
 
 - [完整规范](./SPEC.md) - 系统完整规范
-- [技能指南](./skills/) - 可用的 AI 技能
+- [技能指南](./skills/) - 规范参考与推荐技能
 - [规则指南](./rules/) - 项目规则系统
+- [模板库](./templates/) - 核心模板
 
 ---
 

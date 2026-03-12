@@ -10,7 +10,7 @@ English | [简体中文](./README.md)
 [![GitHub forks](https://img.shields.io/github/forks/ArnoFrost/AI-TASK?style=flat-square&logo=github)](https://github.com/ArnoFrost/AI-TASK/network)
 [![GitHub last commit](https://img.shields.io/github/last-commit/ArnoFrost/AI-TASK?style=flat-square)](https://github.com/ArnoFrost/AI-TASK/commits)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.2.0-green.svg?style=flat-square)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.5.0-green.svg?style=flat-square)](CHANGELOG.md)
 [![DDAC](https://img.shields.io/badge/Powered%20by-DDAC-blueviolet?style=flat-square&logo=bookstack)](https://github.com/ArnoFrost/DDAC)
 
 <p>
@@ -33,6 +33,7 @@ English | [简体中文](./README.md)
 - [Quick Start](#-quick-start)
 - [Architecture](#-architecture)
 - [Directory Structure](#-directory-structure)
+- [Task Tags](#-task-tags)
 - [Known Limitations](#️-known-limitations-stay-small--sharp)
 - [Contributing](#-contributing)
 
@@ -71,17 +72,17 @@ graph LR
         D2[🏗️ 4-Layer Arch]
         D3[📝 17 Meta-Prompts]
     end
-    
+
     subgraph "AI-TASK Implementation"
         A1[📂 Project Structure]
-        A2[⚡ Slash Commands]
-        A3[📋 Task Templates]
+        A2[📋 Task Templates]
+        A3[🤖 AGENT.md]
     end
-    
+
     D1 -->|guides| A1
     D2 -->|implements| A2
     D3 -->|applies| A3
-    
+
     style D1 fill:#e1f5fe
     style D2 fill:#e1f5fe
     style D3 fill:#e1f5fe
@@ -99,7 +100,7 @@ It is designed primarily for **solo developers** who work on many repositories a
 | 🗂️ | **Per-project space** - Each project lives under `projects/{CODE}/` |
 | 🔗 | **Symlink integration** - Non-invasive via `ai-task/` mount point |
 | 📱 | **Cross-device sync** - `project.yaml` supports multi-device paths |
-| 🤖 | **AI native** - Built-in slash commands for CodeBuddy/Claude Code |
+| 🤖 | **Multi-IDE support** - Claude Code / CodeBuddy / Cursor / AGENT.md |
 | 📐 | **Template-driven** - Consistent, predictable AI output |
 
 ### Fits / Doesn't fit
@@ -125,12 +126,6 @@ AI-TASK follows the self-governance principles of [DDAC methodology](https://git
 | **Tasks Must Be Documented** | Discussion plans → `tasks/` task documents |
 | **Status Must Be Updated** | Task completion → update `index.md` task list |
 
-**Task Documentation Triggers** (create task if any applies):
-- User proposes multi-step optimization/improvement plan
-- User includes `@projects/{PROJECT}/index.md` context
-- Discussion involves 3+ file modifications
-- User mentions "plan", "design", "proposal", "improve"
-
 See [SPEC.md#ddac-self-governance](./SPEC.md#-ddac-自治理规范) for details.
 
 ---
@@ -147,19 +142,24 @@ git clone https://github.com/ArnoFrost/AI-TASK.git ~/AI-TASK
 
 ```bash
 cd ~/AI-TASK
-./init-project.sh MYAPP "My App" "/Users/xxx/Projects/myapp" "React, TypeScript"
 
-# Or interactive mode
+# Interactive mode (recommended)
 ./init-project.sh
+
+# Or with arguments
+./init-project.sh myapp --name "My App" --path "/path/to/myapp" --tech "React,TS"
 ```
 
-### 3) Use commands in your AI assistant
+### 3) Start collaborating
+
+In your AI assistant, include the project entry:
 
 ```
-/task create [feature] User Login Module
-/task list
-/status
+@projects/MYAPP/index.md
+Help me implement user login
 ```
+
+> 💡 Slash commands are managed via personal skill libraries. See [skills/README.md](./skills/README.md)
 
 ---
 
@@ -173,11 +173,13 @@ graph TB
         SKILLS[skills/]
         RULES[rules/]
         TEMPLATES[templates/]
+        TOOLS[tools/]
 
         AITASK --> PROJECTS
         AITASK --> SKILLS
         AITASK --> RULES
         AITASK --> TEMPLATES
+        AITASK --> TOOLS
 
         subgraph "Project Spaces"
             P1[PROJECT_A/]
@@ -211,10 +213,10 @@ graph TB
 
 ```text
 AI-TASK/
-├── README.md
-├── README_EN.md
+├── README.md / README_EN.md
 ├── SPEC.md
-├── init-project.sh
+├── AGENT.md / CODEBUDDY.md    # AI collaboration entry (IDE adapters)
+├── init-project.sh             # Interactive multi-IDE project init
 ├── projects/
 │   └── {PROJECT}/
 │       ├── project.yaml
@@ -222,11 +224,26 @@ AI-TASK/
 │       ├── tasks/
 │       ├── docs/
 │       └── archive/ (optional)
-├── skills/
+├── skills/                     # Spec references (pure spec layer)
 ├── rules/
-├── templates/
-└── .codebuddy/commands/
+├── templates/                  # Core templates
+└── tools/                      # Utility scripts
 ```
+
+---
+
+## 📋 Task Tags
+
+| Tag | Purpose | Tag | Purpose |
+|-----|---------|-----|---------|
+| `[功能]` | New feature | `[优化]` | Optimization |
+| `[修复]` | Bug fix | `[排查]` | Investigation |
+| `[文档]` | Documentation | `[调研]` | Research |
+| `[技术方案]` | Technical design | `[规范]` | Standards |
+| `[下线]` | Deprecation | `[清理]` | Cleanup |
+| `[梳理]` | Analysis | `[测试]` | Testing |
+| `[评审]` | Code review | `[架构]` | Architecture |
+| `[集成]` | Integration | `[同步]` | Tech sync |
 
 ---
 
