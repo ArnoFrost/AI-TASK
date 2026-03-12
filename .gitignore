@@ -17,17 +17,10 @@ temp/
 *.tmp
 *.temp
 
-# CodeBuddy 本地配置（各项目独立，不提交到大仓）
-# 模板文件在 templates/codebuddy/ 目录
-.codebuddy/
-# 但保留公共命令定义（斜杠命令是核心功能）
-!.codebuddy/commands/
-!.codebuddy/commands/*.md
-!.codebuddy/rules/
-!.codebuddy/rules/*.md
-
-# Local config (if any)
+# Local config
 local.config.md
+relink.local.sh
+*.local.sh
 
 # ========== 项目数据隐私保护 ==========
 # 只公开 EXAMPLE 作为示例项目，其他真实项目数据不提交
@@ -37,23 +30,6 @@ projects/*/
 
 # 但保留 EXAMPLE 目录（示例项目，完整公开）
 !projects/EXAMPLE/
-
-# 保留 AI-TASK 目录结构（仅入口文件，不公开演进任务）
-!projects/AI-TASK/
-!projects/AI-TASK/index.md
-!projects/AI-TASK/project.yaml
-!projects/AI-TASK/README.md
-!projects/AI-TASK/tasks/
-!projects/AI-TASK/tasks/.gitkeep
-!projects/AI-TASK/docs/
-!projects/AI-TASK/docs/.gitkeep
-
-# AI-TASK 演进任务不公开（内部使用）
-projects/AI-TASK/tasks/*.md
-!projects/AI-TASK/tasks/.gitkeep
-projects/AI-TASK/docs/*.md
-!projects/AI-TASK/docs/.gitkeep
-projects/AI-TASK/archive/
 
 # 保留目录结构占位符
 !projects/*/tasks/.gitkeep
