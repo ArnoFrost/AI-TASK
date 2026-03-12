@@ -20,23 +20,26 @@
 AI-TASK/                          # 协作中心 (iCloud 同步)
 ├── SPEC.md                       # 本规范文档
 ├── README.md                     # 快速入门
-├── init-project.sh               # 项目初始化脚本
+├── init-project.sh               # 项目初始化脚本（交互式多 IDE）
+├── relink.sh                     # 软链接重建脚本
 ├── projects/                     # 项目空间
-│   ├── AI-TASK/                  # 本项目自治
 │   └── {PROJECT}/                # 子项目 (按代号命名)
-│       ├── project.yaml          # 项目元数据 (v2 新增)
+│       ├── project.yaml          # 项目元数据
 │       ├── index.md              # 项目入口
 │       ├── tasks/                # 任务目录
 │       ├── docs/                 # 文档目录
 │       └── archive/              # 归档目录 (可选)
 ├── rules/                        # 规则库
 │   └── {PROJECT}.md              # 项目规则
-├── skills/                       # 技能库 (对齐 agentskills.io)
-│   └── {skill-name}/SKILL.md     # 技能定义
-├── templates/                    # 模板库
+├── skills/                       # 规范参考（纯规范层）
+│   └── {skill-name}/SKILL.md     # 规范定义
+├── templates/                    # 核心模板库
+│   ├── AGENT.md                  # 通用 AI 协作入口模板
 │   ├── project.yaml              # 项目元数据模板
 │   ├── project-index.md          # 项目入口模板
-│   └── task-template.md          # 任务模板
+│   ├── task-template.md          # 任务模板
+│   └── review-actions.yaml       # 评审行动项 schema
+├── tools/                        # 工具脚本
 ├── temp/                         # 临时文件
 └── archive/                      # 全局归档
 ```
@@ -64,6 +67,15 @@ AI-TASK/                          # 协作中心 (iCloud 同步)
 └── archive/              # 可选：已完成任务归档
     └── YYYY-MM/
 ```
+
+### 文件夹任务约束
+
+| 约束项 | 规则 |
+|--------|------|
+| `task_plan.md` 行数 | **≤ 300 行**，仅做"问题定义 + 分工 + 结论汇总" |
+| 详细分析 | 拆到子文件 `task_{N}_{主题}.md` |
+| 子文件数量 | ≤ 10 个 |
+| 触发拆分 | 当 task_plan.md 超过 300 行时，必须拆分子文件 |
 
 ### 项目元数据 (project.yaml)
 
@@ -152,6 +164,54 @@ mv tasks/20251211-001_*.md archive/2025-12/
 
 ---
 
+## 📄 任务文档 Frontmatter 规范
+
+所有任务文档**必须**包含 YAML frontmatter，格式如下：
+
+```yaml
+---
+date: 2026-03-04             # 创建日期 (YYYY-MM-DD)
+status: done                 # 状态: todo | in-progress | done
+type: 排查                    # 标签类型（与文件名标签一致，不含方括号）
+tags:                        # 主题标签（可选，用于聚合检索）
+  - MixVFP
+  - 起播链路
+related:                     # 关联任务编号（可选，支持跨项目引用）
+  - "20260302-001"           # 同项目任务引用
+  - "TVKMM/20260303-005"    # 跨项目任务引用
+---
+```
+
+| 字段 | 必需 | 说明 |
+|------|------|------|
+| `date` | ✅ | 创建日期 |
+| `status` | ✅ | `todo` / `in-progress` / `done` |
+| `type` | ✅ | 对应文件名中的标签类型 |
+| `tags` | ⚪ | 主题标签，用于 Dataview 聚合检索 |
+| `related` | ⚪ | 关联任务编号，形成 task chain |
+
+### `related` 字段语义
+
+`related` 用于标记任务间的**松散关联**（因果、主题、依赖），不强制顺序：
+
+```yaml
+related:
+  - "20260302-001"                    # 同项目任务引用（纯编号）
+  - "TVKMM/20260303-005"             # 跨项目任务引用（项目代号/编号）
+```
+
+**使用建议**：
+- 同一技术主题的任务链互相引用（如 MixVFP 系列排查 → 修复 → 评审）
+- AI 可通过 Dataview 聚合同 `related` 链的任务，构建主题维度索引
+- 不要求双向引用，单向标记即可（后续任务引用前序任务）
+
+**约束规则**：
+- AI 生成新任务时**必须**包含 frontmatter，忽略旧文件格式
+- `status` 字段必须与 index.md 中的状态保持同步
+- `tags` 中的主题标签用于构建模块维度索引
+
+---
+
 ## 🏷️ 命名规范
 
 ### 项目代号
@@ -174,8 +234,9 @@ mv tasks/20251211-001_*.md archive/2025-12/
 | `custom` | 自定义 pattern | 按 `task_naming.pattern` 生成 |
 
 **编号规则**：
-- 序号（NNN）**全局递增**，不按日期重置
-- 新任务编号 = 当前 `tasks/` 目录中最大 NNN + 1
+- 序号（NNN）**全局递增**，跨日期连续编号
+- 新任务编号 = `tasks/` 目录下最大 NNN + 1
+- 日期前缀 `YYYYMMDD` 记录创建日期，序号保证全局唯一
 - 若目录为空则从 `001` 开始
 
 **配置示例**（在 `project.yaml` 中）：
@@ -189,14 +250,24 @@ task_naming:
 
 ### 标签类型
 
+**核心标签**（必选 1 个，覆盖绝大多数场景）：
+
 | 标签 | 说明 | 标签 | 说明 |
 |------|------|------|------|
-| `[功能]` | 新功能 | `[优化]` | 性能优化 |
-| `[修复]` | Bug 修复 | `[排查]` | 问题分析 |
+| `[功能]` | 新功能开发 | `[优化]` | 性能/体验优化 |
+| `[修复]` | Bug 修复 | `[排查]` | 问题分析定位 |
 | `[文档]` | 文档编写 | `[调研]` | 技术调研 |
 | `[技术方案]` | 方案设计 | `[规范]` | 规范制定 |
 | `[下线]` | 功能下线 | `[清理]` | 代码清理 |
 | `[梳理]` | 逻辑梳理 | `[测试]` | 测试相关 |
+| `[评审]` | 代码/方案评审 | `[架构]` | 架构设计/重构 |
+| `[集成]` | 模块/系统集成 | `[同步]` | 技术摘要同步 |
+
+**标签约束规则**：
+- 每个任务**必须且只能使用 1 个**标签
+- AI **不得自行创造**新标签，如遇无法归类的任务，使用最接近的核心标签
+- 项目可在 `project.yaml` 中通过 `allowed_tags` 限定可用标签子集
+- `[技术方案]` 不得简写为 `[方案]`，`[功能]` 不得替换为 `[任务]`
 
 ---
 
@@ -245,34 +316,38 @@ skills/
 │   └── assets/               # 可选：静态资源
 ```
 
-### 内置技能
+### 规范参考（仓库内）
+
+仓库 `skills/` 仅保留纯规范参考，不含可执行逻辑：
 
 | 技能 | 说明 |
 |------|------|
-| task-management | 任务创建、更新、查询 |
-| project-init | 初始化项目配置 |
-| git-minimal-commit | 最小化提交整理 |
-| ddac-governance | DDAC 自治理规范 |
-| sync-templates | 模板同步 |
+| ddac-governance | DDAC 自治理协议（纯规范） |
+| complex-task-workspace | 文件夹任务目录约定（纯规范） |
 
-### 可选技能
+### 推荐个人技能（外部）
 
-| 技能 | 说明 |
-|------|------|
-| complex-task-workspace | 复杂任务工作区（多文档/多阶段目录约定） |
-| agent-team-review | 多角色协作评审（总分总结构） |
+可执行技能通过个人技能库（如 `my-claude-skills/`）管理，以下为推荐配套技能：
+
+| 技能 | 触发 | 说明 |
+|------|------|------|
+| ai-task-review | `/ai-task-review` | AI-TASK 工程专属多角色协作评审 |
+| ai-task-init | `/ai-task-init` | 项目初始化 / 规范对齐 |
+| ai-task-sync | `/ai-task-sync` | 增量同步已有项目到最新规范 |
+| commit | `/commit` | Conventional Commits 提交 |
 
 ### 项目级 skill 引用
 
-项目可在 `index.md` 的 `<ai-task-context>` 中声明启用可选 skill：
+项目可在 `index.md` 的 `<ai-task-context>` 中声明启用规范参考 skill：
 
 ```xml
 <ai-task-context project="XXX">
 ...
-## 可选技能
 skills:
-  - agent-team-review
   - complex-task-workspace
+notes:
+  - 评审使用个人技能 /ai-task-review
+  - 项目对齐使用 /ai-task-init 或 /ai-task-sync
 </ai-task-context>
 ```
 
@@ -280,9 +355,9 @@ skills:
 
 | 场景 | 行为 |
 |------|------|
-| 未声明 `skills` | 只使用默认内置技能 |
-| 声明了 `skills` | AI 在该项目上下文中自动激活对应 skill |
-| 对话中触发词匹配 | 用户可在对话中通过触发词临时激活任何 skill，无需项目声明 |
+| 声明了 `skills` | AI 在该项目上下文中自动激活对应规范参考 |
+| `notes` 字段 | 提示用户使用对应个人技能 |
+| 对话中触发词匹配 | 用户可通过 `/ai-task-review` 等斜杠命令直接调用 |
 
 ---
 
@@ -377,12 +452,14 @@ skills:
 ### 方式一：脚本初始化
 
 ```bash
-# 在 AI-TASK 目录下执行
-./init-project.sh <PROJECT_CODE> "<PROJECT_NAME>" "<PROJECT_PATH>" "<TECH_STACK>"
+# 在 AI-TASK 目录下执行（交互模式，推荐）
+./init-project.sh
 
-# 示例
-./init-project.sh myapp "My Application" "/Users/xxx/Projects/myapp" "React, TypeScript"
+# 或指定参数
+./init-project.sh myapp --name "My App" --path "/path/to/myapp" --tech "React,TS"
 ```
+
+脚本支持多 IDE 适配器选择（Claude Code / CodeBuddy / Cursor / 通用 AGENT.md）。
 
 ### 方式二：手动初始化
 
@@ -508,6 +585,10 @@ ls -d skills/*/
 
 | 版本 | 日期 | 说明 |
 |------|------|------|
+| v1.5.0 | 2026-03-12 | 架构精简：templates 纯模板层、多 IDE 适配、AGENT.md、隐私修复 |
+| v1.4.0 | 2026-03-04 | Frontmatter 规范、编号修正、AI 评审驱动演进 |
+| v1.3.1 | 2026-02-12 | XML 标签升级、规范碎片化修复、EXAMPLE 完整生命周期 |
+| v1.3.0 | 2026-02-03 | 三层架构、init_sub_project 增强、全局编号 |
 | v1.2.0 | 2026-01-12 | README 极客化、.gitignore 通用化、开源规范优化 |
 | v1.1.1 | 2026-01-11 | DDAC 关联说明、代码块语法统一 |
 | v1.1.0 | 2026-01-11 | 任务命名可配置化、模板同步机制、斜杠命令版本控制 |

@@ -55,6 +55,25 @@ metadata:
   # author: ""
   # version: ""
 
+# ========== 任务约束配置 ==========
+
+# 允许使用的标签子集 (留空 = 使用 SPEC.md 定义的全部核心标签)
+# allowed_tags:
+#   - 功能
+#   - 修复
+#   - 排查
+#   - 评审
+#   - 技术方案
+
+# 任务文档约束
+task_constraints:
+  # task_plan.md 最大行数（超过需拆分子文件）
+  task_plan_max_lines: 300
+  # tasks/ 目录最大条目数
+  max_active_tasks: 15
+  # 归档窗口（天数，超过则归档）
+  archive_after_days: 3
+
 # ========== 同步配置 ==========
 
 # 模板同步配置 (控制 ./sync-templates.sh 的行为)
