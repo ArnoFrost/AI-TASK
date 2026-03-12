@@ -1,0 +1,24 @@
+# Review Actions Index
+# 评审行动项持久化索引 — 跨评审追踪行动项生命周期
+#
+# 存放位置: projects/{PROJECT}/review_actions.yaml
+# 更新时机: 每次评审 Merge 阶段完成后自动生成/追加
+# 归档规则: 独立于 tasks/ 归档，仅当所有 actions 状态为终态时可归档
+
+schema_version: "1.0"
+project: "{PROJECT_CODE}"
+
+# 行动项列表
+actions:
+  - action_id: "{评审编号}-A{N}"    # 稳定标识符，如 006-A1
+    source_review: "{评审任务目录名}" # 如 20260304-006_[评审]v0.2演进远景交叉评审
+    summary: "{行动项一句话描述}"
+    priority: P0                     # P0 / P1 / P2
+    owner: "{负责人}"
+    status: open                     # open | in_progress | done | deferred | cancelled
+    created: "YYYY-MM-DD"
+    due_date: "YYYY-MM-DD"          # 可选，预期完成日期
+    deferred_reason: ""             # status=deferred 时必填
+    verification_review: ""         # 验证该 action 的评审任务目录名
+    evidence: ""                    # 完成证据（commit SHA、文件路径等）
+    acceptance_criteria: "{可测试的完成条件}"
