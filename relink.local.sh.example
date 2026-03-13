@@ -1,0 +1,17 @@
+#!/bin/bash
+# =====================================================
+# relink.local.sh — 你的项目软链接映射配置
+# =====================================================
+# 使用方法:
+#   1. cp relink.local.sh.example relink.local.sh
+#   2. 编辑下方 LINK_MAP 数组，添加你的项目映射
+#   3. 运行 ./relink.sh 重建所有软链接
+#
+# 格式: "项目代号|代码仓库绝对路径"
+# =====================================================
+
+declare -a LINK_MAP=(
+  # "MYAPP|$HOME/Projects/my-app"
+  # "DEMO|$HOME/Projects/demo"
+  # "EXAMPLE|$HOME/Projects/example-project"
+)

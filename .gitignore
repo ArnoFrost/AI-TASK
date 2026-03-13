@@ -24,6 +24,7 @@ relink.local.sh
 
 # ========== 项目数据隐私保护 ==========
 # 只公开 EXAMPLE 作为示例项目，其他真实项目数据不提交
+# 注意：projects/AI-TASK/ 为内部自治空间（DDAC 自治理），同样不公开
 
 # 忽略 projects 下的所有项目目录
 projects/*/

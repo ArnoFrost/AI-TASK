@@ -25,11 +25,11 @@ task_naming:
   # - "simple"  : {NNN}-任务名称.md                   (仅序号，最简)
   # - "custom"  : 使用下方 pattern 自定义
   format: "full"
-  
+
   # 自定义格式 (仅当 format: "custom" 时生效)
   # 可用变量: {DATE}, {NNN}, {TAG}, {NAME}
   # pattern: "{DATE}-{NNN}_{TAG}{NAME}.md"
-  
+
   # 序号位数 (默认 3，即 001-999)
   # seq_digits: 3
 
@@ -73,20 +73,3 @@ task_constraints:
   max_active_tasks: 15
   # 归档窗口（天数，超过则归档）
   archive_after_days: 3
-
-# ========== 同步配置 ==========
-
-# 模板同步配置 (控制 ./sync-templates.sh 的行为)
-sync:
-  # 是否接受主仓模板同步
-  enabled: true           # false = 跳过此项目
-  
-  # 同步策略
-  strategy: "merge"       # merge | skip | force
-  # - merge: 只补充缺失字段（默认，推荐）
-  # - skip: 完全跳过此项目
-  # - force: 强制用模板覆盖（危险）
-  
-  # 锁定字段 (这些字段不会被同步覆盖)
-  locked_fields: []
-  # 示例: [task_naming, tech_stack]
