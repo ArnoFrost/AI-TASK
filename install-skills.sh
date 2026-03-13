@@ -17,11 +17,11 @@ SKILLS=(task-review task-init)
 # IDE 配置：名称 → 全局目录 → 子目录名
 # 格式：ide_name:base_dir:subdir
 IDE_CONFIGS=(
-  "claude:$HOME/.claude/commands"
-  "claude-internal:$HOME/.claude-internal/commands"
-  "codebuddy:$HOME/.codebuddy/commands"
+  "claude:$HOME/.claude/skills"
+  "claude-internal:$HOME/.claude-internal/skills"
+  "codebuddy:$HOME/.codebuddy/skills"
   "codex:$HOME/.codex/skills"
-  "gemini:$HOME/.gemini/commands"
+  "gemini:$HOME/.gemini/skills"
 )
 
 # 颜色

@@ -84,10 +84,15 @@ AI-TASK/
 ├── README.md                 # 快速入门
 ├── README_EN.md              # English version
 ├── SPEC.md                   # 完整规范（Single Source of Truth）
+├── CODEBUDDY.md              # CodeBuddy AI 协作入口
+├── CONTRIBUTING.md           # 贡献指南
+├── CHANGELOG.md              # 版本历史
+├── LICENSE                   # MIT 许可证
 ├── AGENT.md / CODEBUDDY.md   # AI 协作入口（IDE 适配）
 ├── init-project.sh           # 项目初始化脚本（交互式多 IDE）
 ├── install-skills.sh         # 开源技能全局注入脚本
 ├── relink.sh                 # 软链接重建脚本
+├── relink.local.sh.example   # 本地软链接配置示例
 ├── projects/                 # 项目协作空间目录
 │   ├── EXAMPLE/              # 示例项目（公开）
 │   │   ├── project.yaml      # 项目元数据（含跨设备路径）
@@ -102,12 +107,13 @@ AI-TASK/
 ├── templates/                # 核心模板库
 │   ├── AGENT.md              # 通用 AI 协作入口模板
 │   ├── project.yaml          # 项目元数据模板
+│   ├── project-minimal.yaml  # 精简项目元数据模板
 │   ├── project-index.md      # 项目入口模板
+│   ├── project-rules.md      # 项目规则模板
 │   ├── task-template.md      # 任务文档模板
 │   └── review-actions.yaml   # 评审行动项 schema
 ├── tools/                    # 工具脚本
-│   ├── validate_obsidian.py  # Obsidian 格式校验
-│   └── relink.sh → ../relink.sh
+│   └── validate_obsidian.py  # Obsidian 格式校验
 └── docs/                     # 架构与原理文档
     └── ARCHITECTURE.md       # 本文件
 ```
