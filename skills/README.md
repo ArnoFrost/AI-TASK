@@ -1,34 +1,36 @@
 # AI Skills 规范参考
 
-> 仓库 `skills/` 仅保留纯规范参考文档，不含可执行逻辑。
-> 可执行技能已迁移至个人技能库（如 `my-claude-skills/`）管理。
+> 仓库 `skills/` 保留 SKILL.md 编写规范和开源可用的精简技能。
+> 高级可执行技能通过个人技能库（如 `my-claude-skills/`）管理。
 
-## 精简策略
-
-AI-TASK 仓库定位为**模板/规范层**，可执行技能由个人技能库提供：
-
-| 层级 | 职责 | 示例 |
-|------|------|------|
-| 仓库 `skills/` | 纯规范参考 | ddac-governance, complex-task-workspace |
-| 个人技能库 | 可执行技能 | ai-task-review, ai-task-init, ai-task-sync, commit |
-
-## 📂 规范参考列表
-
-| 技能 | 说明 |
-|------|------|
-| [ddac-governance](./ddac-governance/SKILL.md) | DDAC 自治理协议 |
-| [complex-task-workspace](./complex-task-workspace/SKILL.md) | 文件夹任务目录约定 |
-
-## 推荐个人技能
+## 开源技能
 
 | 技能 | 触发 | 说明 |
 |------|------|------|
-| ai-task-review | `/ai-task-review` | AI-TASK 工程专属多角色协作评审 |
-| ai-task-init | `/ai-task-init` | 项目初始化 / 规范对齐 |
-| ai-task-sync | `/ai-task-sync` | 增量同步已有项目到最新规范 |
-| commit | `/commit` | Conventional Commits 提交 |
+| task-review | `/task-review` | 单视角评审（结构/可执行性/风险合一） |
+| task-init | `/task-init` | 项目初始化 / 规范对齐 |
 
-## 📐 SKILL.md 格式
+### 安装到 IDE
+
+使用 `install-skills.sh` 将开源技能注入到各 IDE 全局目录：
+
+```bash
+# 交互式选择注入哪些 IDE
+./install-skills.sh
+
+# 注入全部已安装的 IDE
+./install-skills.sh --all
+
+# 查看已注入状态
+./install-skills.sh --list
+
+# 清理已注入的 symlink
+./install-skills.sh --remove
+```
+
+支持的 IDE：claude、claude-internal、codebuddy、codex、gemini。
+
+## SKILL.md 格式
 
 对齐 [agentskills.io/specification](https://agentskills.io/specification)：
 
@@ -45,7 +47,17 @@ metadata:                             # 可选
 ---
 ```
 
-## 🔗 相关链接
+## 推荐个人技能
+
+| 技能 | 触发 | 说明 |
+|------|------|------|
+| ai-task-review | `/ai-task-review` | 多角色协作评审（总分总结构，增强版） |
+| ai-task-init | `/ai-task-init` | 项目初始化（增强版，含 vault 路径探测） |
+| ai-task-sync | `/ai-task-sync` | 增量同步已有项目到最新规范 |
+| commit | `/commit` | Conventional Commits 提交 |
+
+## 相关链接
 
 - [agentskills.io 规范](https://agentskills.io/specification)
 - [全局规范](../SPEC.md)
+- [install-skills.sh](../install-skills.sh) — 全局注入脚本

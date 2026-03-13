@@ -3,7 +3,8 @@
 自动行为: 创建任务 → 执行 → 更新 index.md → 归档
 约束: 严格遵循 README.md 中的命名/标签/归档规范，不创造新标签
 skills:
-  - complex-task-workspace
+  - task-review
+  - task-init
 notes:
   - 评审使用个人技能 /ai-task-review
   - 项目对齐使用 /ai-task-init 或 /ai-task-sync
@@ -68,7 +69,7 @@ _暂无近期完成任务_
 ## 📝 备注
 
 > 这是一个示例项目，用于演示 AI-TASK 的基本用法。
-> 
+>
 > **零摩擦使用**：
 > - 引入本文件 `@projects/EXAMPLE/index.md`
 > - 描述你要做什么（如"帮我实现购物车功能"）

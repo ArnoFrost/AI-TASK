@@ -16,7 +16,6 @@ task_naming:
   # 序号位数 (默认 3)
   # seq_digits: 3
 
-
 tech_stack:
   - TypeScript
   - React
@@ -32,10 +31,3 @@ related: []
 
 metadata:
   description: AI-TASK 示例项目，展示基本用法
-
-# 模板同步配置
-sync:
-  enabled: true           # false = 跳过此项目的模板同步
-  strategy: "merge"       # merge | skip | force
-  locked_fields: []       # 不被同步覆盖的字段，如: [task_naming, tech_stack]
-

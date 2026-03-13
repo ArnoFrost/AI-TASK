@@ -3,7 +3,8 @@
 自动行为: 创建任务 → 执行 → 更新 index.md → 归档
 约束: 严格遵循 README.md 中的命名/标签/归档规范，不创造新标签
 skills:
-  - complex-task-workspace
+  - task-review
+  - task-init
 notes:
   - 评审使用个人技能 /ai-task-review
   - 项目对齐使用 /ai-task-init 或 /ai-task-sync

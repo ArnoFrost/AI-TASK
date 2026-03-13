@@ -7,6 +7,29 @@
 
 ---
 
+## [1.5.1] - 2026-03-13
+
+### Added
+- **`projects/AI-TASK/` 自治空间恢复**：遵循 DDAC 自治理原则，AI-TASK 自身演进任务在此管理（不公开）
+- **`docs/ARCHITECTURE.md`**：从 README 拆出架构原理、目录结构详解、软链接工作原理、任务标签列表
+- **`projects/EXAMPLE/README.md`**：协作规范文档，修复 index.md 对 `./README.md` 的断链
+- **`relink.local.sh.example`**：示例配置文件，让 relink.sh 使用路径完整
+
+### Changed
+- **README.md 瘦身**：335 行 → 172 行，架构/目录/标签/软链接详情移至 ARCHITECTURE.md
+- **README_EN.md 同步**：以中文 README 为基准完整翻译，30秒体验路径一致
+- **EXAMPLE 修复**：移除 `complex-task-workspace` 幽灵引用，移除 `sync:` 配置块
+- **templates 清理**：`project.yaml` 移除 `sync:` 配置块，`project-index.md` 移除 `complex-task-workspace` 引用
+- **CONTRIBUTING.md**：目录结构改为引用 SPEC.md，新增 AI-TASK 自治空间说明
+- **SPEC.md**：版本历史表改为链接 CHANGELOG.md，AI-TASK 自治说明明确不公开
+
+### Fixed
+- EXAMPLE index.md 中 `complex-task-workspace` 引用（已删除技能）
+- EXAMPLE index.md 中 `./README.md` 链接（文件不存在）
+- 中英文 README 30秒体验路径不一致
+
+---
+
 ## [1.5.0] - 2026-03-12
 
 ### Added
@@ -14,11 +37,15 @@
 - **review_actions.yaml**: 评审行动项索引 schema
 - **AGENT.md**: 通用 AI 协作入口模板（IDE 无关）
 - **init-project.sh 多 IDE 支持**: 交互式选择 Claude Code / CodeBuddy / Cursor / 通用
+- **skills/task-review**: 开源单视角评审技能（结构/可执行性/风险合一）
+- **skills/task-init**: 开源项目初始化技能（生成 project.yaml / index.md / README.md）
+- **install-skills.sh**: 全局技能注入脚本，支持 claude / codebuddy / codex / gemini 等 IDE
 
 ### Changed
+- **开源完备性**: 清理遗留文件（`.codebuddy/rules/`、`sync-templates.sh`、`skills/ddac-governance/`、`skills/complex-task-workspace/`），更新贡献指南，文档化开源边界
+- **Skills 架构升级**: `skills/` 从纯规范参考层升级为包含开源精简技能 + 规范参考
 - **编号规则修正**: 回退为全局递增（修正 v1.4.0 引入的日内递增）
 - **templates/ 精简**: 移除 IDE 斜杠命令层，保留核心模板
-- **Skills 架构精简**: `skills/` 收敛为纯规范参考层
 - **init-project.sh 重写**: 交互式多 IDE 适配，不再生成斜杠命令目录
 - **relink.sh 模板化**: LINK_MAP 外置为 local config
 
@@ -190,6 +217,7 @@
 
 ---
 
+[1.5.1]: https://github.com/ArnoFrost/AI-TASK/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/ArnoFrost/AI-TASK/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/ArnoFrost/AI-TASK/compare/v1.3.1...v1.4.0
 [1.3.1]: https://github.com/ArnoFrost/AI-TASK/compare/v1.3.0...v1.3.1

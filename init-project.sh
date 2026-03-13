@@ -1,6 +1,6 @@
 #!/bin/bash
 # =====================================================
-# AI-TASK 项目初始化脚本 v1.5.0
+# AI-TASK 项目初始化脚本 v2.0.0
 # =====================================================
 # 交互式多 IDE 支持的项目初始化工具
 #
@@ -13,7 +13,7 @@
 
 set -e
 
-VERSION="1.5.0"
+VERSION="2.0.0"
 
 # ======================== 颜色定义 ========================
 RED='\033[0;31m'
@@ -468,14 +468,16 @@ main() {
     echo "──────────────────────────────────────────"
 
     # ------ 1. 创建目录结构 ------
-    echo -e "${GREEN}[1/6]${NC} 创建目录结构..."
+    echo -e "${GREEN}[1/7]${NC} 创建目录结构..."
     mkdir -p "$project_dir/tasks"
     mkdir -p "$project_dir/docs"
+    touch "$project_dir/tasks/.gitkeep"
+    touch "$project_dir/docs/.gitkeep"
     echo -e "  ${GREEN}+${NC} $project_dir/tasks/"
     echo -e "  ${GREEN}+${NC} $project_dir/docs/"
 
     # ------ 2. 生成 project.yaml ------
-    echo -e "${GREEN}[2/6]${NC} 生成项目元数据 project.yaml..."
+    echo -e "${GREEN}[2/7]${NC} 生成项目元数据 project.yaml..."
 
     # 技术栈转 YAML 数组
     local tech_yaml=""
@@ -513,7 +515,7 @@ EOF
     echo -e "  ${GREEN}+${NC} $project_dir/project.yaml"
 
     # ------ 3. 生成 index.md ------
-    echo -e "${GREEN}[3/6]${NC} 生成项目入口 index.md..."
+    echo -e "${GREEN}[3/7]${NC} 生成项目入口 index.md..."
 
     local template_index="$TEMPLATES_DIR/project-index.md"
     if [[ -f "$template_index" ]]; then
@@ -527,31 +529,22 @@ EOF
     else
         cat > "$project_dir/index.md" << EOF
 <ai-task-context project="$PROJECT_CODE">
-
-## 自动行为（无需用户指令）
-1. **阅读任务列表** - 了解当前进度，避免重复工作
-2. **自动创建任务** - 用户描述需求时，自动生成任务文档到 tasks/
-3. **自动命名编号** - 格式: {DATE}-{SEQ}_[标签]名称.md，用户无需关心
-4. **自动更新状态** - 任务完成后更新本文件任务列表
-
-## 任务文档自动生成规则
-- 文件名: YYYYMMDD-NNN_[标签]任务名.md (AI自动生成)
-- 标签: 根据任务内容自动判断（详见 ../../SPEC.md#标签类型）
-- 编号: **全局递增**，跨日期连续编号，取 tasks/ 目录最大 NNN + 1
-
-## 用户只需要
-- 描述要做什么（自然语言）
-- AI 自动完成：创建任务 → 执行 → 更新状态 → 提交
-
-规范详见：../../SPEC.md
-
+项目: $PROJECT_CODE | 规范: ./README.md | 全局规范: ../../SPEC.md
+自动行为: 创建任务 → 执行 → 更新 index.md → 归档
+约束: 严格遵循 README.md 中的命名/标签/归档规范，不创造新标签
+skills:
+  - task-review
+  - task-init
+notes:
+  - 评审使用 /task-review
+  - 项目对齐使用 /task-init
 </ai-task-context>
 
 # $PROJECT_NAME
 
 > 项目简要描述
 
-## 项目信息
+## 📌 项目信息
 
 | 属性 | 值 |
 |------|-----|
@@ -560,24 +553,46 @@ EOF
 | **主要技术栈** | ${TECH_STACK:-待补充} |
 | **创建时间** | $today |
 
+## 🏗️ 项目结构
+
+\`\`\`text
+$PROJECT_CODE/
+├── project.yaml
+├── index.md
+├── README.md
+├── tasks/
+├── docs/
+└── archive/
+    └── YYYY-MM/
+\`\`\`
+
 ---
 
-## 任务列表
+## 📋 任务列表
 
 > 按时间倒序排列
 
-### 进行中
+### 进行中 🔄
 
 _暂无进行中任务_
 
-### 已完成
+### 已完成 ✅
 
 _暂无已完成任务_
 
 ---
 
+## 📂 历史归档
+
+| 月份 | 说明 |
+|------|------|
+| _暂无归档_ | |
+
+---
+
 ## 快捷链接
 
+- [协作规范](./README.md)
 - [任务目录](./tasks/)
 - [文档目录](./docs/)
 - [项目元数据](./project.yaml)
@@ -586,10 +601,68 @@ EOF
         echo -e "  ${GREEN}+${NC} $project_dir/index.md ${DIM}(内置模板)${NC}"
     fi
 
-    # ------ 4. 生成 rules/{CODE}.md ------
-    echo -e "${GREEN}[4/6]${NC} 生成项目规则 rules/$PROJECT_CODE.md..."
+    # ------ 4. 生成 README.md ------
+    echo -e "${GREEN}[4/7]${NC} 生成协作规范 README.md..."
+    cat > "$project_dir/README.md" << EOF
+# ${PROJECT_NAME} — 协作规范
+
+> 本文档定义 ${PROJECT_CODE} 项目的 AI 协作约定，AI 引入 \`index.md\` 后自动遵循。
+
+## 命名规范
+
+- **任务格式**：\`{YYYYMMDD}-{NNN}_[标签]任务名称.md\`（full 模式）
+- **编号规则**：全局递增，跨日期连续编号
+- **标签**：使用 [SPEC.md 核心标签](../../SPEC.md#标签类型)，每个任务必须且只能使用 1 个
+
+## 目录结构
+
+\`\`\`text
+${PROJECT_CODE}/
+├── project.yaml          # 项目元数据
+├── index.md              # 项目入口（任务列表）
+├── README.md             # 本文件（协作规范）
+├── tasks/                # 进行中的任务
+├── docs/                 # 项目文档
+└── archive/              # 已完成任务归档
+    └── YYYY-MM/
+\`\`\`
+
+## 工作流
+
+1. 引入 \`@projects/${PROJECT_CODE}/index.md\`
+2. 描述需求，AI 自动创建任务文档
+3. AI 执行任务并更新 \`index.md\` 状态
+4. 完成后归档到 \`archive/YYYY-MM/\`
+
+## 归档规则
+
+| 条件 | 动作 |
+|------|------|
+| 任务状态 = 已完成 | 可归档 |
+| 任务创建超过 7 天 | 建议归档 |
+| index.md 任务超过 20 条 | 触发归档提醒 |
+
+## 参考
+
+- [全局规范](../../SPEC.md)
+- [项目元数据](./project.yaml)
+- [任务模板](../../templates/task-template.md)
+EOF
+    echo -e "  ${GREEN}+${NC} $project_dir/README.md"
+
+    # ------ 5. 生成 rules/{CODE}.md ------
+    echo -e "${GREEN}[5/7]${NC} 生成项目规则 rules/$PROJECT_CODE.md..."
     mkdir -p "$RULES_DIR"
-    cat > "$RULES_DIR/$PROJECT_CODE.md" << EOF
+
+    local template_rules="$TEMPLATES_DIR/project-rules.md"
+    if [[ -f "$template_rules" ]]; then
+        sed -e "s/{PROJECT_CODE}/$PROJECT_CODE/g" \
+            -e "s/{PROJECT_NAME}/$PROJECT_NAME/g" \
+            -e "s/{project_code}/${PROJECT_CODE,,}/g" \
+            "$template_rules" > "$RULES_DIR/$PROJECT_CODE.md"
+        echo -e "  ${GREEN}+${NC} $RULES_DIR/$PROJECT_CODE.md ${DIM}(基于模板)${NC}"
+    else
+        cat > "$RULES_DIR/$PROJECT_CODE.md" << EOF
 ---
 name: ${PROJECT_CODE,,}-rules
 description: ${PROJECT_NAME} 项目规则
@@ -638,11 +711,12 @@ project-root/
 
 - 待补充
 EOF
-    echo -e "  ${GREEN}+${NC} $RULES_DIR/$PROJECT_CODE.md"
+        echo -e "  ${GREEN}+${NC} $RULES_DIR/$PROJECT_CODE.md ${DIM}(内置模板)${NC}"
+    fi
 
-    # ------ 5. 创建软链接 ------
+    # ------ 6. 创建软链接 ------
     if [[ -n "$PROJECT_PATH" && -d "$PROJECT_PATH" ]]; then
-        echo -e "${GREEN}[5/6]${NC} 创建软链接..."
+        echo -e "${GREEN}[6/7]${NC} 创建软链接..."
         local link_path="$PROJECT_PATH/ai-task"
         if [[ -L "$link_path" ]]; then
             rm "$link_path"
@@ -650,19 +724,19 @@ EOF
         ln -s "$project_dir" "$link_path"
         echo -e "  ${GREEN}+${NC} $link_path -> $project_dir"
     elif [[ -n "$PROJECT_PATH" && ! -d "$PROJECT_PATH" ]]; then
-        echo -e "${YELLOW}[5/6]${NC} 跳过软链接 (路径不存在: $PROJECT_PATH)"
+        echo -e "${YELLOW}[6/7]${NC} 跳过软链接 (路径不存在: $PROJECT_PATH)"
     else
-        echo -e "${YELLOW}[5/6]${NC} 跳过软链接 (未提供项目路径)"
+        echo -e "${YELLOW}[6/7]${NC} 跳过软链接 (未提供项目路径)"
     fi
 
     # ------ 6. IDE 适配器 ------
     if [[ -n "$PROJECT_PATH" && -d "$PROJECT_PATH" ]]; then
-        echo -e "${GREEN}[6/6]${NC} 生成 IDE 适配器配置..."
+        echo -e "${GREEN}[7/7]${NC} 生成 IDE 适配器配置..."
         apply_ide_adapters "$PROJECT_PATH" "$PROJECT_CODE" "$PROJECT_NAME"
     elif [[ "$IDE_SELECTIONS" != "n" ]]; then
-        echo -e "${YELLOW}[6/6]${NC} 跳过 IDE 适配器 (项目路径无效，无法写入 IDE 文件)"
+        echo -e "${YELLOW}[7/7]${NC} 跳过 IDE 适配器 (项目路径无效，无法写入 IDE 文件)"
     else
-        echo -e "${DIM}[6/6]${NC} 跳过 IDE 适配器"
+        echo -e "${DIM}[7/7]${NC} 跳过 IDE 适配器"
     fi
 
     # ======================== 配置摘要 ========================
@@ -683,6 +757,7 @@ EOF
     echo -e "${BOLD}生成的文件:${NC}"
     echo "  - $project_dir/project.yaml"
     echo "  - $project_dir/index.md"
+    echo "  - $project_dir/README.md"
     echo "  - $project_dir/tasks/"
     echo "  - $project_dir/docs/"
     echo "  - $RULES_DIR/$PROJECT_CODE.md"
