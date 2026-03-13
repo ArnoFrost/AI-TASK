@@ -72,4 +72,4 @@ task_constraints:
   # tasks/ 目录最大条目数
   max_active_tasks: 15
   # 归档窗口（天数，超过则归档）
-  archive_after_days: 3
+  archive_after_days: 7
