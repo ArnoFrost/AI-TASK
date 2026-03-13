@@ -27,7 +27,7 @@ metadata:
 按以下顺序定位 AI-TASK 目录：
 
 1. 检查当前目录是否在 AI-TASK 仓库内
-2. 检查默认路径：`~/Library/Mobile Documents/iCloud~md~obsidian/Documents/AI Obsidian/AI-TASK`
+2. 通过 `find` 或环境变量 `$AI_TASK_PATH` 搜索本地 AI-TASK 目录
 3. 若均不存在 → 提示用户提供路径
 
 ## 执行流程

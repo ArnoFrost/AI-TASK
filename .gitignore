@@ -32,9 +32,9 @@ projects/*/
 # 但保留 EXAMPLE 目录（示例项目，完整公开）
 !projects/EXAMPLE/
 
-# 保留目录结构占位符
-!projects/*/tasks/.gitkeep
-!projects/*/docs/.gitkeep
+# 保留 EXAMPLE 目录结构占位符
+!projects/EXAMPLE/tasks/.gitkeep
+!projects/EXAMPLE/docs/.gitkeep
 
 # 全局归档目录（历史敏感数据）
 archive/
