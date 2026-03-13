@@ -61,38 +61,48 @@ AI-TASK is a **file-system convention for AI collaboration**: it uses a consiste
 
 ## Quick Start (3 minutes)
 
-### 1. Clone
+### Option 1: AI One-Click Setup (Recommended)
+
+Tell your AI assistant:
+
+> Help me install and initialize the AI-TASK collaboration system
+> Repository: https://github.com/ArnoFrost/AI-TASK
+
+Or run directly:
 
 ```bash
-git clone https://github.com/ArnoFrost/AI-TASK.git ~/AI-TASK
+curl -fsSL https://raw.githubusercontent.com/ArnoFrost/AI-TASK/main/setup.sh | bash
 ```
 
-### 2. Initialize a project space
+AI will automatically: clone repo → choose install path → initialize project → inject skills
 
-```bash
-cd ~/AI-TASK
+### Option 2: Manual Installation
 
-# Interactive mode (recommended)
-./init-project.sh
+1. **Clone the repository**
 
-# Or with arguments
-./init-project.sh myapp --name "My App" --path "/path/to/myapp" --tech "React,TS"
-```
+   ```bash
+   git clone https://github.com/ArnoFrost/AI-TASK.git ~/AI-TASK
+   ```
 
-### 3. Start collaborating
+2. **Initialize a project space**
 
-Include the project entry in your AI assistant:
+   ```bash
+   cd ~/AI-TASK
+   ./init-project.sh
+   ```
 
-```
-@projects/MYAPP/index.md
-Help me implement user login
-```
+3. **Start collaborating** — include the project entry in your AI assistant:
 
-### 4. Install open-source skills (optional)
+   ```
+   @projects/MYAPP/index.md
+   Help me implement user login
+   ```
 
-```bash
-./install-skills.sh
-```
+4. **Install open-source skills** (optional)
+
+   ```bash
+   ./install-skills.sh
+   ```
 
 > Slash commands are managed via personal skill libraries. See [skills/README.md](./skills/README.md)
 

@@ -25,6 +25,7 @@ AI-TASK/                          # 协作中心 (iCloud 同步)
 ├── CONTRIBUTING.md               # 贡献指南
 ├── CHANGELOG.md                  # 版本历史
 ├── LICENSE                       # MIT 许可证
+├── setup.sh                      # 一键安装+初始化脚本（支持 curl | bash）
 ├── init-project.sh               # 项目初始化脚本（交互式多 IDE）
 ├── install-skills.sh             # 开源技能全局注入脚本
 ├── relink.sh                     # 软链接重建脚本
