@@ -1,13 +1,14 @@
 ---
 name: task-init
 description: |
-  AI-TASK 项目初始化 — 为项目创建 AI-TASK 规范目录结构，生成 project.yaml、index.md、README.md，配置软链接。
+  AI-TASK 项目初始化 — 为项目创建 AI-TASK 规范目录结构，生成 project.yaml、index.md、README.md，
+  配置软链接。IDE 入口文件 (AGENT.md 等) 存储在 vault 中，工作仓库通过软链接引用。
   Use when: 初始化 ai-task、新建项目、对齐规范、project init、task-init
 user_invocable: true
 license: MIT
 metadata:
   author: ArnoFrost
-  version: 1.0.0
+  version: 1.1.0
 ---
 
 # AI-TASK 项目初始化
@@ -104,7 +105,25 @@ notes:
 - 归档规则（近 3 天 + 进行中）
 - 规范自约束（行数/条目数/大小限制）
 
-### 7. 配置软链接
+### 7. 生成 IDE 入口文件 (vault 存储 + 软链接)
+
+IDE 入口文件（AGENT.md / CLAUDE.md / CODEBUDDY.md）**存储在 vault** 的 `projects/{CODE}/` 下，
+工作仓库根目录通过**软链接**引用。
+
+```bash
+# 1. 生成 AGENT.md 到 vault
+# → AI-TASK/projects/{CODE}/AGENT.md
+
+# 2. 创建软链接到工作仓库
+ln -s "{AI_TASK_PATH}/projects/{CODE}/AGENT.md" "{LOCAL_PATH}/AGENT.md"
+```
+
+**优势**：
+- 文件受 vault 内部 git 审计，变更可追溯
+- 工作仓库只有软链接，`.gitignore` 排除即可，不污染主干
+- 在 vault 中定制编辑，跨设备自动同步
+
+### 8. 配置软链接
 
 ```bash
 # 创建从项目到 AI-TASK 的软链接
@@ -113,7 +132,19 @@ ln -s "{AI_TASK_PATH}/projects/{CODE}" "{LOCAL_PATH}/ai-task"
 
 若软链接已存在，提示用户确认是否覆盖。
 
-### 8. 输出 diff 确认
+### 9. 更新 .gitignore
+
+确保工作仓库的 `.gitignore` 排除 AI-TASK 相关文件：
+
+```gitignore
+# AI-TASK (symlinks to vault, do not commit)
+ai-task
+AGENT.md
+CLAUDE.md
+CODEBUDDY.md
+```
+
+### 10. 输出 diff 确认
 
 在执行写入前，向用户展示将要创建/更新的文件列表和关键内容差异，获得确认后再执行。
 
@@ -124,6 +155,7 @@ ln -s "{AI_TASK_PATH}/projects/{CODE}" "{LOCAL_PATH}/ai-task"
 | 全局递增编号 | 任务编号全局递增，跨日期连续编号 |
 | 16 核心标签 | 功能/优化/修复/排查/文档/调研/技术方案/规范/下线/清理/梳理/测试/评审/架构/集成/同步 |
 | frontmatter 必需 | date, status, type 三字段必需 |
+| IDE 入口文件存 vault | AGENT.md 等文件不直接写入工作仓库，存储在 vault 中通过软链接引用 |
 
 ## Obsidian 格式规范
 
