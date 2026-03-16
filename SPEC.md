@@ -35,6 +35,7 @@ AI-TASK/                          # 协作中心 (iCloud 同步)
 │       ├── project.yaml          # 项目元数据
 │       ├── index.md              # 项目入口
 │       ├── README.md             # 协作规范
+│       ├── AGENT.md              # IDE 入口文件 (可选, 工作仓库通过软链接引用)
 │       ├── tasks/                # 任务目录
 │       ├── docs/                 # 文档目录
 │       └── archive/              # 归档目录 (可选)
@@ -472,6 +473,8 @@ notes:
 
 脚本支持多 IDE 适配器选择（Claude Code / CodeBuddy / Cursor / 通用 AGENT.md）。
 
+> **v3.0.0**: 软链接采用 local 化命名（`ai-task.local/`、`AGENT.local.md`），配合全局 gitignore 自动忽略，不再需要修改每个仓库的 `.gitignore`。
+
 ### 方式二：手动初始化
 
 1. **创建项目目录**
@@ -491,9 +494,9 @@ notes:
    # 编辑 index.md 填写项目信息
    ```
 
-4. **创建软链接**
+4. **创建软链接**（local 化命名）
    ```bash
-   ln -s "/path/to/AI-TASK/projects/{PROJECT}" "/path/to/project/ai-task"
+   ln -s "/path/to/AI-TASK/projects/{PROJECT}" "/path/to/project/ai-task.local"
    ```
 
 ### 方式三：AI 协作初始化
@@ -510,27 +513,95 @@ notes:
 
 ## 🔗 软链接配置
 
+### 设计原则
+
+AI-TASK 通过**软链接**将 vault 中的项目数据接入工作仓库，实现：
+
+| 特性 | 说明 |
+|------|------|
+| **不侵入主干** | 工作仓库只有 `.local` 后缀的软链接，全局 gitignore 自动忽略 |
+| **vault 内审计** | IDE 入口文件在 vault 内部 git 管理，变更可追溯 |
+| **跨设备同步** | vault 通过 iCloud 同步，`relink.sh` 一键重建软链接 |
+| **自由定制** | 在 vault 中编辑 AGENT.md 等文件，工作仓库自动同步 |
+| **零配置忽略** | 全局 gitignore 一次配置，所有仓库自动忽略 `.local` 文件 |
+
+### Local 化命名（v3.0.0）
+
+参考 Claude Code `CLAUDE.local.md` 机制，工作仓库中的软链接统一使用 `.local` 后缀：
+
+| 类型 | 链接路径（工作仓库） | 目标路径（vault） |
+|------|----------------------|-------------------|
+| 项目目录 | `{PROJECT_ROOT}/ai-task.local` | `AI-TASK/projects/{PROJECT}` |
+| IDE 入口文件 | `{PROJECT_ROOT}/AGENT.local.md` | `AI-TASK/projects/{PROJECT}/AGENT.md` |
+| IDE 入口文件 | `{PROJECT_ROOT}/CLAUDE.local.md` | `AI-TASK/projects/{PROJECT}/CLAUDE.md` |
+| IDE 入口文件 | `{PROJECT_ROOT}/CODEBUDDY.local.md` | `AI-TASK/projects/{PROJECT}/CODEBUDDY.md` |
+
+> **核心语义**：`.local` = "本地个人文件，不提交到版本控制"。这是业界通用约定（`.env.local`, `settings.local.json`, `docker-compose.local.yml`）。
+>
+> **vault 源文件名不变**（`AGENT.md` 还是 `AGENT.md`），只有工作仓库的软链接名带 `.local` 后缀。
+
 ### 创建软链接
 
 ```bash
-# 格式
-ln -s "{AI-TASK}/projects/{PROJECT}" "{PROJECT_ROOT}/ai-task"
+# 项目目录软链接
+ln -s "{AI-TASK}/projects/{PROJECT}" "{PROJECT_ROOT}/ai-task.local"
 
-# 示例
-ln -s "~/AI-TASK/projects/EXAMPLE" "~/Projects/example-project/ai-task"
+# IDE 入口文件软链接（如 AGENT.md → AGENT.local.md）
+ln -s "{AI-TASK}/projects/{PROJECT}/AGENT.md" "{PROJECT_ROOT}/AGENT.local.md"
 ```
 
 ### 验证软链接
 
 ```bash
-ls -la {PROJECT_ROOT}/ai-task
-# 应显示指向 AI-TASK/projects/{PROJECT} 的链接
+ls -la {PROJECT_ROOT}/ai-task.local
+ls -la {PROJECT_ROOT}/AGENT.local.md
+# 应显示指向 AI-TASK/projects/{PROJECT}/ 的链接
 ```
 
 ### 移除软链接
 
 ```bash
-rm {PROJECT_ROOT}/ai-task  # 只删除链接，不影响原文件
+rm {PROJECT_ROOT}/ai-task.local     # 只删除链接，不影响 vault 中的原文件
+rm {PROJECT_ROOT}/AGENT.local.md    # 同上
+```
+
+### 跨设备重建
+
+```bash
+# 在 AI-TASK 目录下执行
+./relink.sh              # 重建所有软链接（local 化命名）
+./relink.sh --check      # 检查当前软链接状态
+./relink.sh --dry-run    # 预览，不实际操作
+./relink.sh --migrate    # 将旧命名 (ai-task, AGENT.md) 迁移为 local 化命名
+```
+
+### 全局 gitignore 配置
+
+**推荐方式**：配置全局 gitignore，一次设置所有仓库自动忽略（不再需要修改每个仓库的 `.gitignore`）：
+
+```bash
+# 追加 local 化规则到全局 gitignore
+echo 'ai-task.local' >> ~/.gitignore_global
+echo '*.local.md' >> ~/.gitignore_global
+
+# 确保 git 使用全局 gitignore（如尚未配置）
+git config --global core.excludesFile ~/.gitignore_global
+```
+
+**备选方式**：如果不想用全局 gitignore，也可以使用仓库级本地忽略（不提交）：
+
+```bash
+# 写入 .git/info/exclude（效果同 .gitignore 但不提交）
+echo 'ai-task.local' >> .git/info/exclude
+echo '*.local.md' >> .git/info/exclude
+```
+
+### 从旧版本迁移
+
+如果已有旧版本的软链接（`ai-task`、`AGENT.md`），使用 `--migrate` 一键迁移：
+
+```bash
+./relink.sh --migrate    # 自动将旧链接重命名为 local 化命名
 ```
 
 ---

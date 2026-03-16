@@ -8,6 +8,25 @@
 #   3. 运行 ./relink.sh 重建所有软链接
 #
 # 格式: "项目代号|代码仓库绝对路径"
+#
+# relink.sh v3.0.0 会自动处理:
+#   - ai-task.local 目录软链接 (始终创建，local 化命名)
+#   - IDE 入口文件软链接 (AGENT.local.md / CLAUDE.local.md / CODEBUDDY.local.md)
+#     → 自动检测 vault 中是否存在对应源文件，存在则创建 local 化软链接
+#
+# Local 化命名 (v3.0.0):
+#   工作仓库中的软链接使用 .local 后缀，配合全局 gitignore 自动忽略：
+#     ai-task.local/     → AI-TASK/projects/{CODE}
+#     AGENT.local.md     → AI-TASK/projects/{CODE}/AGENT.md
+#     CLAUDE.local.md    → AI-TASK/projects/{CODE}/CLAUDE.md (原生 Claude Code 兼容)
+#     CODEBUDDY.local.md → AI-TASK/projects/{CODE}/CODEBUDDY.md
+#
+# 全局 gitignore 配置（一次性，所有仓库生效）:
+#   echo 'ai-task.local' >> ~/.gitignore_global
+#   echo '*.local.md' >> ~/.gitignore_global
+#   git config --global core.excludesFile ~/.gitignore_global
+#
+# 提示: init-project.sh v3.0.0 会自动追加新项目映射到此文件
 # =====================================================
 
 declare -a LINK_MAP=(

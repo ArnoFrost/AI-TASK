@@ -1,6 +1,6 @@
 #!/bin/bash
 # =====================================================
-# AI-TASK 项目初始化脚本 v2.0.0
+# AI-TASK 项目初始化脚本 v3.0.0
 # =====================================================
 # 交互式多 IDE 支持的项目初始化工具
 #
@@ -9,11 +9,18 @@
 #   ./init-project.sh                          # 纯交互模式
 #   ./init-project.sh myapp                    # 半交互
 #   ./init-project.sh myapp --path /x --name "My App" --tech "React,TS" --ide 1,4
+#
+# v3.0.0 变更:
+#   - 软链接 local 化命名：ai-task → ai-task.local, AGENT.md → AGENT.local.md
+#   - 参考 Claude Code CLAUDE.local.md 机制，消除 .gitignore 配置负担
+#   - 移除 update_project_gitignore() 逻辑（改用全局 gitignore）
+#   - IDE 入口文件内容中的路径引用同步更新为 ai-task.local/
+#   - 完成后提示配置全局 gitignore
 # =====================================================
 
 set -e
 
-VERSION="2.0.0"
+VERSION="3.0.0"
 
 # ======================== 颜色定义 ========================
 RED='\033[0;31m'
@@ -77,6 +84,17 @@ print_help() {
     echo "  a  全部"
     echo "  n  跳过"
     echo ""
+    echo "Local 化命名 (v3.0.0):"
+    echo "  工作仓库中的软链接使用 .local 后缀："
+    echo "    ai-task.local/     → AI-TASK/projects/{CODE}"
+    echo "    AGENT.local.md     → AI-TASK/projects/{CODE}/AGENT.md"
+    echo "    CLAUDE.local.md    → AI-TASK/projects/{CODE}/CLAUDE.md"
+    echo "    CODEBUDDY.local.md → AI-TASK/projects/{CODE}/CODEBUDDY.md"
+    echo ""
+    echo "  配合全局 gitignore 一次配置所有仓库自动忽略："
+    echo "    echo 'ai-task.local' >> ~/.gitignore_global"
+    echo "    echo '*.local.md' >> ~/.gitignore_global"
+    echo ""
     echo "示例:"
     echo "  $0 myapp --ide 4"
     echo "  $0 myapp --path ~/Projects/myapp --name \"My App\" --tech \"React,TS\" --ide 1,4"
@@ -85,30 +103,33 @@ print_help() {
 # ======================== IDE 适配器函数 ========================
 
 # --- Claude Code 适配器 ---
+# CLAUDE.md 存储在 vault projects/{CODE}/ 下，工作仓库通过软链接引用
+# 软链接名为 CLAUDE.local.md（与 Claude Code 原生 .local 机制对齐）
 setup_ide_claude_code() {
     local project_path="$1"
     local project_code="$2"
     local project_name="$3"
+    local vault_project_dir="$PROJECTS_DIR/$project_code"
 
-    # 创建 .claude/ 目录（不创建 commands/ 子目录）
+    # 创建 .claude/ 目录（直接在工作仓库，IDE 配置目录不走 vault）
     mkdir -p "$project_path/.claude"
 
-    # 生成 CLAUDE.md
-    cat > "$project_path/CLAUDE.md" << EOF
+    # 生成 CLAUDE.md → vault
+    cat > "$vault_project_dir/CLAUDE.md" << EOF
 # ${project_name}
 
 > AI 协作入口 · Claude Code · Powered by [AI-TASK](https://github.com/ArnoFrost/AI-TASK)
 
 ## 项目信息
 
-详见 \`ai-task/project.yaml\`
+详见 \`ai-task.local/project.yaml\`
 
 ## 任务管理
 
 | 操作 | 说明 |
 |------|------|
-| 创建任务 | 描述需求，AI 自动创建到 ai-task/tasks/ |
-| 查看任务 | 查看 ai-task/index.md 任务列表 |
+| 创建任务 | 描述需求，AI 自动创建到 ai-task.local/tasks/ |
+| 查看任务 | 查看 ai-task.local/index.md 任务列表 |
 | 完成任务 | AI 自动更新状态并归档 |
 
 ## 标签
@@ -118,7 +139,7 @@ setup_ide_claude_code() {
 ## 结构
 
 \`\`\`
-ai-task/                    # 软链接 → AI-TASK/projects/${project_code}
+ai-task.local/              # 软链接 → AI-TASK/projects/${project_code} (local, gitignored)
 ├── project.yaml            # 项目元数据
 ├── index.md                # 项目入口
 ├── tasks/                  # 任务目录
@@ -127,38 +148,46 @@ ai-task/                    # 软链接 → AI-TASK/projects/${project_code}
 
 ## 规范
 
-详见 ai-task/ 下的 ../../SPEC.md
+详见 ai-task.local/ 下的 ../../SPEC.md
+
+<!-- 可在 vault 中编辑此文件，工作仓库通过 CLAUDE.local.md 软链接自动同步 -->
 EOF
 
-    echo -e "  ${GREEN}+${NC} $project_path/CLAUDE.md"
+    echo -e "  ${GREEN}+${NC} $vault_project_dir/CLAUDE.md ${DIM}(vault)${NC}"
+
+    # 创建 local 化软链接到工作仓库
+    create_ide_symlink "$project_path/CLAUDE.local.md" "$vault_project_dir/CLAUDE.md"
+
     echo -e "  ${GREEN}+${NC} $project_path/.claude/"
 }
 
 # --- CodeBuddy 适配器 ---
+# CODEBUDDY.md 存储在 vault projects/{CODE}/ 下，工作仓库通过软链接引用
 setup_ide_codebuddy() {
     local project_path="$1"
     local project_code="$2"
     local project_name="$3"
+    local vault_project_dir="$PROJECTS_DIR/$project_code"
 
-    # 创建 .codebuddy/ 目录（不创建 commands/ 子目录）
+    # 创建 .codebuddy/ 目录（直接在工作仓库，IDE 配置目录不走 vault）
     mkdir -p "$project_path/.codebuddy"
 
-    # 生成 CODEBUDDY.md
-    cat > "$project_path/CODEBUDDY.md" << EOF
+    # 生成 CODEBUDDY.md → vault
+    cat > "$vault_project_dir/CODEBUDDY.md" << EOF
 # ${project_name}
 
 > AI 协作入口 · CodeBuddy · Powered by [AI-TASK](https://github.com/ArnoFrost/AI-TASK)
 
 ## 项目信息
 
-详见 \`ai-task/project.yaml\`
+详见 \`ai-task.local/project.yaml\`
 
 ## 任务管理
 
 | 操作 | 说明 |
 |------|------|
-| 创建任务 | 描述需求，AI 自动创建到 ai-task/tasks/ |
-| 查看任务 | 查看 ai-task/index.md 任务列表 |
+| 创建任务 | 描述需求，AI 自动创建到 ai-task.local/tasks/ |
+| 查看任务 | 查看 ai-task.local/index.md 任务列表 |
 | 完成任务 | AI 自动更新状态并归档 |
 
 ## 标签
@@ -168,7 +197,7 @@ setup_ide_codebuddy() {
 ## 结构
 
 \`\`\`
-ai-task/                    # 软链接 → AI-TASK/projects/${project_code}
+ai-task.local/              # 软链接 → AI-TASK/projects/${project_code} (local, gitignored)
 ├── project.yaml            # 项目元数据
 ├── index.md                # 项目入口
 ├── tasks/                  # 任务目录
@@ -177,10 +206,16 @@ ai-task/                    # 软链接 → AI-TASK/projects/${project_code}
 
 ## 规范
 
-详见 ai-task/ 下的 ../../SPEC.md
+详见 ai-task.local/ 下的 ../../SPEC.md
+
+<!-- 可在 vault 中编辑此文件，工作仓库通过 CODEBUDDY.local.md 软链接自动同步 -->
 EOF
 
-    echo -e "  ${GREEN}+${NC} $project_path/CODEBUDDY.md"
+    echo -e "  ${GREEN}+${NC} $vault_project_dir/CODEBUDDY.md ${DIM}(vault)${NC}"
+
+    # 创建 local 化软链接到工作仓库
+    create_ide_symlink "$project_path/CODEBUDDY.local.md" "$vault_project_dir/CODEBUDDY.md"
+
     echo -e "  ${GREEN}+${NC} $project_path/.codebuddy/"
 }
 
@@ -196,7 +231,7 @@ setup_ide_cursor() {
 ---
 description: AI-TASK 项目管理规范
 globs:
-  - ai-task/**
+  - ai-task.local/**
 ---
 
 # ${project_name}
@@ -205,12 +240,12 @@ globs:
 
 ## 项目信息
 
-详见 \`ai-task/project.yaml\`
+详见 \`ai-task.local/project.yaml\`
 
 ## 任务管理
 
-- 创建任务: 描述需求，AI 自动创建到 ai-task/tasks/
-- 查看任务: 查看 ai-task/index.md 任务列表
+- 创建任务: 描述需求，AI 自动创建到 ai-task.local/tasks/
+- 查看任务: 查看 ai-task.local/index.md 任务列表
 - 完成任务: AI 自动更新状态并归档
 
 ## 标签
@@ -219,7 +254,7 @@ globs:
 
 ## 结构
 
-ai-task/ 是软链接，指向 AI-TASK/projects/${project_code}:
+ai-task.local/ 是软链接，指向 AI-TASK/projects/${project_code}:
 - project.yaml — 项目元数据
 - index.md — 项目入口
 - tasks/ — 任务目录
@@ -227,33 +262,36 @@ ai-task/ 是软链接，指向 AI-TASK/projects/${project_code}:
 
 ## 规范
 
-详见 ai-task/ 下的 ../../SPEC.md
+详见 ai-task.local/ 下的 ../../SPEC.md
 EOF
 
     echo -e "  ${GREEN}+${NC} $project_path/.cursor/rules/ai-task.mdc"
 }
 
 # --- 通用 AGENT.md 适配器 ---
+# AGENT.md 存储在 vault projects/{CODE}/ 下，工作仓库通过软链接引用
 setup_ide_agent() {
     local project_path="$1"
     local project_code="$2"
     local project_name="$3"
+    local vault_project_dir="$PROJECTS_DIR/$project_code"
 
-    cat > "$project_path/AGENT.md" << EOF
+    # 生成 AGENT.md → vault
+    cat > "$vault_project_dir/AGENT.md" << EOF
 # ${project_name}
 
 > AI 协作入口 · Powered by [AI-TASK](https://github.com/ArnoFrost/AI-TASK)
 
 ## 项目信息
 
-详见 \`ai-task/project.yaml\`
+详见 \`ai-task.local/project.yaml\`
 
 ## 任务管理
 
 | 操作 | 说明 |
 |------|------|
-| 创建任务 | 描述需求，AI 自动创建到 ai-task/tasks/ |
-| 查看任务 | 查看 ai-task/index.md 任务列表 |
+| 创建任务 | 描述需求，AI 自动创建到 ai-task.local/tasks/ |
+| 查看任务 | 查看 ai-task.local/index.md 任务列表 |
 | 完成任务 | AI 自动更新状态并归档 |
 
 ## 标签
@@ -263,7 +301,7 @@ setup_ide_agent() {
 ## 结构
 
 \`\`\`
-ai-task/                    # 软链接 → AI-TASK/projects/${project_code}
+ai-task.local/              # 软链接 → AI-TASK/projects/${project_code} (local, gitignored)
 ├── project.yaml            # 项目元数据
 ├── index.md                # 项目入口
 ├── tasks/                  # 任务目录
@@ -272,10 +310,116 @@ ai-task/                    # 软链接 → AI-TASK/projects/${project_code}
 
 ## 规范
 
-详见 ai-task/ 下的 ../../SPEC.md
+详见 ai-task.local/ 下的 ../../SPEC.md
+
+<!-- 可在 vault 中编辑此文件，工作仓库通过 AGENT.local.md 软链接自动同步 -->
 EOF
 
-    echo -e "  ${GREEN}+${NC} $project_path/AGENT.md"
+    echo -e "  ${GREEN}+${NC} $vault_project_dir/AGENT.md ${DIM}(vault)${NC}"
+
+    # 创建 local 化软链接到工作仓库
+    create_ide_symlink "$project_path/AGENT.local.md" "$vault_project_dir/AGENT.md"
+}
+
+# ======================== 辅助函数 ========================
+
+# 创建 IDE 入口文件软链接（vault → 工作仓库，local 化命名）
+# 参数: $1=工作仓库中的链接路径(*.local.md)  $2=vault 中的实际文件路径
+create_ide_symlink() {
+    local link_path="$1"
+    local target="$2"
+
+    if [ -L "$link_path" ]; then
+        rm "$link_path"
+    elif [ -f "$link_path" ]; then
+        # 已有同名普通文件 → 备份后替换
+        mv "$link_path" "${link_path}.bak"
+        echo -e "  ${YELLOW}备份${NC} ${link_path} → ${link_path}.bak"
+    fi
+    ln -s "$target" "$link_path"
+    echo -e "  ${GREEN}↗${NC}  $link_path → ${DIM}(vault symlink)${NC}"
+}
+
+# 追加项目映射到 relink.local.sh（如果尚未存在）
+# 参数: $1=项目代号 $2=工作仓库路径
+append_relink_mapping() {
+    local project_code="$1"
+    local project_path="$2"
+    local relink_local="$SCRIPT_DIR/relink.local.sh"
+
+    # 如果 relink.local.sh 不存在，从 example 复制
+    if [ ! -f "$relink_local" ]; then
+        local example="$SCRIPT_DIR/relink.local.sh.example"
+        if [ -f "$example" ]; then
+            cp "$example" "$relink_local"
+            echo -e "  ${GREEN}+${NC} 创建 relink.local.sh (基于 example)"
+        else
+            cat > "$relink_local" << 'EORL'
+#!/bin/bash
+# relink.local.sh — 项目软链接映射配置（自动生成）
+
+declare -a LINK_MAP=(
+)
+EORL
+            echo -e "  ${GREEN}+${NC} 创建 relink.local.sh"
+        fi
+    fi
+
+    # 检查是否已有此项目的映射
+    if grep -q "\"$project_code|" "$relink_local" 2>/dev/null; then
+        echo -e "  ${DIM}relink.local.sh 已包含 $project_code 映射${NC}"
+        return
+    fi
+
+    # 在 LINK_MAP 数组的右括号前插入新条目
+    local escaped_path
+    escaped_path=$(echo "$project_path" | sed 's|/|\\\/|g')
+    # 将绝对路径中的 $HOME 替换为 $HOME 变量引用
+    local home_escaped
+    home_escaped=$(echo "$HOME" | sed 's|/|\\\/|g')
+    local entry_path
+    entry_path=$(echo "$project_path" | sed "s|^$HOME|\\\$HOME|")
+
+    sed -i '' "/^)/i\\
+  \"$project_code|$entry_path\"" "$relink_local" 2>/dev/null
+
+    if [ $? -eq 0 ]; then
+        echo -e "  ${GREEN}+${NC} relink.local.sh: 添加 $project_code 映射"
+    fi
+}
+
+# 检查全局 gitignore 是否已配置 local 化规则
+check_global_gitignore() {
+    local global_ignore
+    global_ignore="$(git config --global core.excludesFile 2>/dev/null)"
+
+    if [[ -z "$global_ignore" ]]; then
+        echo -e "  ${YELLOW}⚠${NC} 全局 gitignore 未配置"
+        return 1
+    fi
+
+    # 展开 ~ 路径
+    global_ignore="${global_ignore/#\~/$HOME}"
+
+    local missing=()
+    if ! grep -q "ai-task.local" "$global_ignore" 2>/dev/null; then
+        missing+=("ai-task.local")
+    fi
+    if ! grep -qE '\*\.local\.md' "$global_ignore" 2>/dev/null; then
+        missing+=("*.local.md")
+    fi
+
+    if [[ ${#missing[@]} -gt 0 ]]; then
+        echo -e "  ${YELLOW}⚠${NC} 全局 gitignore 缺少规则: ${missing[*]}"
+        echo -e "  ${DIM}  建议运行: ${NC}"
+        for rule in "${missing[@]}"; do
+            echo -e "    echo '$rule' >> $global_ignore"
+        done
+        return 1
+    fi
+
+    echo -e "  ${GREEN}✓${NC} 全局 gitignore 已配置 local 化规则"
+    return 0
 }
 
 # ======================== IDE 选择菜单 ========================
@@ -468,7 +612,7 @@ main() {
     echo "──────────────────────────────────────────"
 
     # ------ 1. 创建目录结构 ------
-    echo -e "${GREEN}[1/7]${NC} 创建目录结构..."
+    echo -e "${GREEN}[1/6]${NC} 创建目录结构..."
     mkdir -p "$project_dir/tasks"
     mkdir -p "$project_dir/docs"
     touch "$project_dir/tasks/.gitkeep"
@@ -477,7 +621,7 @@ main() {
     echo -e "  ${GREEN}+${NC} $project_dir/docs/"
 
     # ------ 2. 生成 project.yaml ------
-    echo -e "${GREEN}[2/7]${NC} 生成项目元数据 project.yaml..."
+    echo -e "${GREEN}[2/6]${NC} 生成项目元数据 project.yaml..."
 
     # 技术栈转 YAML 数组
     local tech_yaml=""
@@ -515,7 +659,7 @@ EOF
     echo -e "  ${GREEN}+${NC} $project_dir/project.yaml"
 
     # ------ 3. 生成 index.md ------
-    echo -e "${GREEN}[3/7]${NC} 生成项目入口 index.md..."
+    echo -e "${GREEN}[3/6]${NC} 生成项目入口 index.md..."
 
     local template_index="$TEMPLATES_DIR/project-index.md"
     if [[ -f "$template_index" ]]; then
@@ -602,7 +746,7 @@ EOF
     fi
 
     # ------ 4. 生成 README.md ------
-    echo -e "${GREEN}[4/7]${NC} 生成协作规范 README.md..."
+    echo -e "${GREEN}[4/6]${NC} 生成协作规范 README.md..."
     cat > "$project_dir/README.md" << EOF
 # ${PROJECT_NAME} — 协作规范
 
@@ -626,6 +770,19 @@ ${PROJECT_CODE}/
 └── archive/              # 已完成任务归档
     └── YYYY-MM/
 \`\`\`
+
+## 软链接（工作仓库）
+
+工作仓库通过 local 化软链接接入：
+
+\`\`\`text
+your-project/
+├── ai-task.local/        → AI-TASK/projects/${PROJECT_CODE} (gitignored)
+├── AGENT.local.md        → AI-TASK/projects/${PROJECT_CODE}/AGENT.md (gitignored)
+└── CLAUDE.local.md       → AI-TASK/projects/${PROJECT_CODE}/CLAUDE.md (gitignored)
+\`\`\`
+
+> 配合全局 gitignore (\`ai-task.local\` + \`*.local.md\`) 自动忽略，无需修改项目 .gitignore
 
 ## 工作流
 
@@ -651,7 +808,7 @@ EOF
     echo -e "  ${GREEN}+${NC} $project_dir/README.md"
 
     # ------ 5. 生成 rules/{CODE}.md ------
-    echo -e "${GREEN}[5/7]${NC} 生成项目规则 rules/$PROJECT_CODE.md..."
+    echo -e "${GREEN}[5/6]${NC} 生成项目规则 rules/$PROJECT_CODE.md..."
     mkdir -p "$RULES_DIR"
 
     local template_rules="$TEMPLATES_DIR/project-rules.md"
@@ -714,29 +871,33 @@ EOF
         echo -e "  ${GREEN}+${NC} $RULES_DIR/$PROJECT_CODE.md ${DIM}(内置模板)${NC}"
     fi
 
-    # ------ 6. 创建软链接 ------
+    # ------ 6. 创建软链接 + IDE 适配器 ------
     if [[ -n "$PROJECT_PATH" && -d "$PROJECT_PATH" ]]; then
-        echo -e "${GREEN}[6/7]${NC} 创建软链接..."
-        local link_path="$PROJECT_PATH/ai-task"
+        echo -e "${GREEN}[6/6]${NC} 创建 local 化软链接 + IDE 适配器..."
+
+        # ai-task.local 目录软链接
+        local link_path="$PROJECT_PATH/ai-task.local"
         if [[ -L "$link_path" ]]; then
             rm "$link_path"
         fi
         ln -s "$project_dir" "$link_path"
         echo -e "  ${GREEN}+${NC} $link_path -> $project_dir"
-    elif [[ -n "$PROJECT_PATH" && ! -d "$PROJECT_PATH" ]]; then
-        echo -e "${YELLOW}[6/7]${NC} 跳过软链接 (路径不存在: $PROJECT_PATH)"
-    else
-        echo -e "${YELLOW}[6/7]${NC} 跳过软链接 (未提供项目路径)"
-    fi
 
-    # ------ 6. IDE 适配器 ------
-    if [[ -n "$PROJECT_PATH" && -d "$PROJECT_PATH" ]]; then
-        echo -e "${GREEN}[7/7]${NC} 生成 IDE 适配器配置..."
+        # 追加 relink.local.sh 映射
+        append_relink_mapping "$PROJECT_CODE" "$PROJECT_PATH"
+
+        # IDE 适配器
+        echo ""
+        echo -e "  ${CYAN}── IDE 适配器 (vault + local symlink) ──${NC}"
         apply_ide_adapters "$PROJECT_PATH" "$PROJECT_CODE" "$PROJECT_NAME"
-    elif [[ "$IDE_SELECTIONS" != "n" ]]; then
-        echo -e "${YELLOW}[7/7]${NC} 跳过 IDE 适配器 (项目路径无效，无法写入 IDE 文件)"
+    elif [[ -n "$PROJECT_PATH" && ! -d "$PROJECT_PATH" ]]; then
+        echo -e "${YELLOW}[6/6]${NC} 跳过软链接 (路径不存在: $PROJECT_PATH)"
     else
-        echo -e "${DIM}[7/7]${NC} 跳过 IDE 适配器"
+        echo -e "${YELLOW}[6/6]${NC} 跳过软链接 (未提供项目路径)"
+        # 即使无路径，如果选了 IDE 适配器也生成到 vault
+        if [[ "$IDE_SELECTIONS" != "n" ]]; then
+            echo -e "${DIM}  提示: IDE 入口文件仅生成到 vault，后续可通过 relink.sh 补建软链接${NC}"
+        fi
     fi
 
     # ======================== 配置摘要 ========================
@@ -752,6 +913,7 @@ EOF
     echo -e "  项目路径  : ${CYAN}${PROJECT_PATH:-未指定}${NC}"
     echo -e "  技术栈    : ${CYAN}${TECH_STACK:-未指定}${NC}"
     echo -e "  IDE 适配器: ${CYAN}$(get_ide_names "$IDE_SELECTIONS")${NC}"
+    echo -e "  链接模式  : ${CYAN}local 化 (v3.0.0)${NC}"
     echo "──────────────────────────────────────────"
     echo ""
     echo -e "${BOLD}生成的文件:${NC}"
@@ -762,7 +924,7 @@ EOF
     echo "  - $project_dir/docs/"
     echo "  - $RULES_DIR/$PROJECT_CODE.md"
     if [[ -n "$PROJECT_PATH" && -d "$PROJECT_PATH" ]]; then
-        echo "  - $PROJECT_PATH/ai-task -> $project_dir"
+        echo "  - $PROJECT_PATH/ai-task.local -> $project_dir"
         # 列出 IDE 生成物
         if [[ "$IDE_SELECTIONS" != "n" ]]; then
             local sels="$IDE_SELECTIONS"
@@ -771,23 +933,35 @@ EOF
             for s in "${sel_arr[@]}"; do
                 s="$(echo "$s" | xargs)"
                 case "$s" in
-                    1) echo "  - $PROJECT_PATH/CLAUDE.md" ;;
-                    2) echo "  - $PROJECT_PATH/CODEBUDDY.md" ;;
+                    1) echo "  - $project_dir/CLAUDE.md (vault) → $PROJECT_PATH/CLAUDE.local.md (symlink)" ;;
+                    2) echo "  - $project_dir/CODEBUDDY.md (vault) → $PROJECT_PATH/CODEBUDDY.local.md (symlink)" ;;
                     3) echo "  - $PROJECT_PATH/.cursor/rules/ai-task.mdc" ;;
-                    4) echo "  - $PROJECT_PATH/AGENT.md" ;;
+                    4) echo "  - $project_dir/AGENT.md (vault) → $PROJECT_PATH/AGENT.local.md (symlink)" ;;
                 esac
             done
         fi
     fi
     echo ""
 
+    # 全局 gitignore 检查
+    echo -e "${BOLD}全局 gitignore 状态:${NC}"
+    check_global_gitignore
+    echo ""
+
     echo -e "${BOLD}下一步:${NC}"
     echo "  1. 编辑 $project_dir/project.yaml 补充项目信息"
     echo "  2. 编辑 $RULES_DIR/$PROJECT_CODE.md 补充项目规则"
-    if [[ -z "$PROJECT_PATH" || ! -d "$PROJECT_PATH" ]]; then
+    if [[ -n "$PROJECT_PATH" && -d "$PROJECT_PATH" ]]; then
+        echo "  3. 定制 $project_dir/AGENT.md (或其他 IDE 入口文件)"
+        echo "     文件存储在 vault 中，工作仓库通过 *.local.md 软链接引用"
+        echo "  4. 跨设备时运行 ./relink.sh 重建所有软链接"
+        echo "  5. 确保全局 gitignore 已配置 (ai-task.local + *.local.md)"
+    else
         echo "  3. 手动创建软链接:"
-        echo "     ln -s \"$project_dir\" \"/path/to/project/ai-task\""
-        echo "  4. 重新运行并指定 --path 来生成 IDE 适配器文件"
+        echo "     ln -s \"$project_dir\" \"/path/to/project/ai-task.local\""
+        echo "  4. 运行 ./relink.sh 重建 IDE 入口文件软链接"
+        echo "  5. 编辑 relink.local.sh 添加项目映射"
+        echo "  6. 确保全局 gitignore 已配置 (ai-task.local + *.local.md)"
     fi
     echo ""
 }

@@ -9,7 +9,7 @@ English | [简体中文](./README.md)
 [![GitHub stars](https://img.shields.io/github/stars/ArnoFrost/AI-TASK?style=flat-square&logo=github)](https://github.com/ArnoFrost/AI-TASK/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/ArnoFrost/AI-TASK?style=flat-square&logo=github)](https://github.com/ArnoFrost/AI-TASK/network)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.5.1-green.svg?style=flat-square)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.2.0-green.svg?style=flat-square)](CHANGELOG.md)
 [![DDAC](https://img.shields.io/badge/Powered%20by-DDAC-blueviolet?style=flat-square&logo=bookstack)](https://github.com/ArnoFrost/DDAC)
 
 </div>
@@ -46,7 +46,7 @@ AI-TASK is a **file-system convention for AI collaboration**: it uses a consiste
 | Concept | Description |
 |---------|-------------|
 | **`projects/{CODE}/`** | Per-project collaboration space (tasks, docs, archive, metadata) |
-| **`ai-task/` symlink** | Mounts the collaboration space into your real project root |
+| **`ai-task.local/` symlink** | Mounts the collaboration space into your real project root (global gitignore) |
 | **`project.yaml`** | Records project paths across devices for seamless migration |
 
 ---

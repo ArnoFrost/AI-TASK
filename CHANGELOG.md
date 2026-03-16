@@ -7,6 +7,42 @@
 
 ---
 
+## [2.2.0] - 2026-03-17
+
+### Added
+- **软链接 Local 化命名**：参考 Claude Code `CLAUDE.local.md` 机制，工作仓库软链接统一使用 `.local` 后缀
+  - `ai-task` → `ai-task.local/`
+  - `AGENT.md` → `AGENT.local.md`
+  - `CLAUDE.md` → `CLAUDE.local.md`（与 Claude Code 原生机制完美对齐）
+  - `CODEBUDDY.md` → `CODEBUDDY.local.md`
+- **全局 gitignore 策略**：`ai-task.local` + `*.local.md` 两条规则一次配置所有仓库自动忽略
+- **`relink.sh --migrate`**：旧命名软链接一键迁移为 local 化命名
+- **`init-project.sh` 全局 gitignore 检查**：初始化完成后自动检测全局 gitignore 配置状态
+- **`setup.sh` 升级检查**：已有安装更新和新装 clone 后自动检测全局 gitignore 配置，交互模式一键添加
+- **`tools/bump-version.sh`**：版本号批量演进工具，一键更新所有硬编码版本号位置 + `--check` 一致性验证
+- **`CODEBUDDY.md` 发版规范**：新增强制发版 Checklist（版本号更新、CHANGELOG、tag），防止版本号遗漏
+
+### Changed
+- **`relink.sh` v3.0.0**：软链接创建逻辑使用 local 化命名，IDE 入口文件映射改为源文件名→链接名配对
+- **`init-project.sh` v3.0.0**：移除 `update_project_gitignore()` 逻辑（不再修改每个仓库的 `.gitignore`），IDE 入口文件内容中路径引用更新为 `ai-task.local/`
+- **`relink.local.sh.example`**：更新说明文档反映 v3.0.0 local 化变更
+- **`SPEC.md`**：软链接配置章节全面更新为 local 化方案，新增全局 gitignore 配置和迁移指南
+- **IDE 入口文件模板**：所有 `ai-task/` 路径引用更新为 `ai-task.local/`
+- **`task-init` SKILL v1.1.0**：新增 IDE 入口文件 vault 存储 + 软链接工作流说明
+- **`README.md` / `README_EN.md`**：版本徽章统一 + 核心概念对齐 `ai-task.local/`
+- **`docs/ARCHITECTURE.md`**：软链接章节全面更新为 local 化方案，补全 v2.2.0 说明
+
+### Removed
+- `init-project.sh` 中的 `update_project_gitignore()` 函数（不再需要修改项目 `.gitignore`）
+
+### Migration
+- 运行 `./relink.sh --migrate` 自动将旧链接重命名
+- 配置全局 gitignore：`echo 'ai-task.local' >> ~/.gitignore_global && echo '*.local.md' >> ~/.gitignore_global`
+- 或运行 `setup.sh` 自动检测并提示配置
+- 可选清理：移除各仓库 `.gitignore` 中旧的 AI-TASK 排除规则
+
+---
+
 ## [1.5.1] - 2026-03-13
 
 ### Added
@@ -217,6 +253,7 @@
 
 ---
 
+[2.2.0]: https://github.com/ArnoFrost/AI-TASK/compare/v2.1.0...v2.2.0
 [1.5.1]: https://github.com/ArnoFrost/AI-TASK/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/ArnoFrost/AI-TASK/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/ArnoFrost/AI-TASK/compare/v1.3.1...v1.4.0

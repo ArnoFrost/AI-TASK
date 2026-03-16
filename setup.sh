@@ -1,6 +1,6 @@
 #!/bin/bash
 # =====================================================
-# AI-TASK 一键安装+初始化脚本 v2.0.0
+# AI-TASK 一键安装+初始化脚本 v2.2.0
 # =====================================================
 # 可通过 curl | bash 远程执行，也可 AI 在本地执行
 #
@@ -135,6 +135,58 @@ parse_args() {
     done
 }
 
+# ======================== 全局 gitignore 检查 ========================
+check_global_gitignore() {
+    local gitignore_path
+    gitignore_path="$(git config --global core.excludesFile 2>/dev/null)"
+    gitignore_path="${gitignore_path:-$HOME/.gitignore_global}"
+
+    local missing=()
+
+    if [[ ! -f "$gitignore_path" ]] || ! grep -qF 'ai-task.local' "$gitignore_path" 2>/dev/null; then
+        missing+=('ai-task.local')
+    fi
+    if [[ ! -f "$gitignore_path" ]] || ! grep -qF '*.local.md' "$gitignore_path" 2>/dev/null; then
+        missing+=('*.local.md')
+    fi
+
+    if [[ ${#missing[@]} -eq 0 ]]; then
+        echo -e "  ${GREEN}✓${NC} 全局 gitignore 已配置"
+        return 0
+    fi
+
+    echo -e "  ${YELLOW}⚠${NC} 全局 gitignore 缺少以下条目:"
+    for entry in "${missing[@]}"; do
+        echo -e "    ${DIM}- $entry${NC}"
+    done
+
+    if [[ -t 0 ]]; then
+        read -p "  是否自动添加到 $gitignore_path？(Y/n): " answer
+        if [[ "$answer" != "n" && "$answer" != "N" ]]; then
+            # 确保 core.excludesFile 已配置
+            if [[ -z "$(git config --global core.excludesFile 2>/dev/null)" ]]; then
+                git config --global core.excludesFile "$gitignore_path"
+            fi
+            for entry in "${missing[@]}"; do
+                echo "$entry" >> "$gitignore_path"
+            done
+            echo -e "  ${GREEN}✓${NC} 已添加到 $gitignore_path"
+        else
+            echo -e "  ${DIM}跳过。你可以手动添加:${NC}"
+            for entry in "${missing[@]}"; do
+                echo -e "    ${CYAN}echo '$entry' >> $gitignore_path${NC}"
+            done
+        fi
+    else
+        # 管道模式：不能交互，只提示
+        echo ""
+        echo -e "  ${BOLD}请手动执行:${NC}"
+        for entry in "${missing[@]}"; do
+            echo -e "    ${CYAN}echo '$entry' >> $gitignore_path${NC}"
+        done
+    fi
+}
+
 # ======================== 步骤 1: 检测已有安装 ========================
 step_detect() {
     echo -e "${BLUE}${BOLD}[1/4]${NC} 检测已有安装..."
@@ -156,6 +208,11 @@ step_detect() {
         else
             echo -e "  ${YELLOW}⚠${NC} 无法自动更新，跳过（可能有本地修改）"
         fi
+
+        # 升级检查：全局 gitignore
+        echo ""
+        echo -e "  ${DIM}检查全局 gitignore 配置...${NC}"
+        check_global_gitignore
         return 0
     fi
 
@@ -327,6 +384,13 @@ main() {
 
     # 步骤 3: Clone（幂等）
     step_clone
+
+    # 新安装时也检查全局 gitignore
+    if [[ "$already_installed" == false ]]; then
+        echo ""
+        echo -e "  ${DIM}配置全局 gitignore...${NC}"
+        check_global_gitignore
+    fi
 
     # 步骤 4: 初始化
     step_init

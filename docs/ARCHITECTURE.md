@@ -129,7 +129,7 @@ AI-TASK 通过软链接将协作空间"挂载"到你的真实项目中：
 flowchart LR
     subgraph YOUR_PROJECT["你的项目"]
         A["~/Projects/myapp/"]
-        B["ai-task/"]
+        B["ai-task.local/"]
     end
 
     subgraph AITASK["AI-TASK"]
@@ -155,7 +155,7 @@ flowchart LR
 ./init-project.sh myapp --path ~/Projects/myapp
 
 # 方式二：手动创建
-ln -s "~/AI-TASK/projects/MYAPP" "~/Projects/myapp/ai-task"
+ln -s "~/AI-TASK/projects/MYAPP" "~/Projects/myapp/ai-task.local"
 
 # 方式三：批量重建（多项目）
 cp relink.local.sh.example relink.local.sh
@@ -163,10 +163,12 @@ cp relink.local.sh.example relink.local.sh
 ./relink.sh
 ```
 
+> **v2.2.0+**: 软链接统一使用 `.local` 后缀，通过全局 gitignore 忽略，无需修改每个仓库的 `.gitignore`。
+
 ### 工作效果
 
-- AI 助手通过 `ai-task/tasks/` 访问任务文件
-- 无侵入式集成（只有一个软链接）
+- AI 助手通过 `ai-task.local/tasks/` 访问任务文件
+- 无侵入式集成（软链接 + 全局 gitignore，对团队仓库零污染）
 - 在多个项目间复用同一套协作模板与规范
 - 跨设备迁移时只需重建软链接（`./relink.sh`）
 
